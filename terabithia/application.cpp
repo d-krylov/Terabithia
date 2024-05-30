@@ -1,11 +1,18 @@
 #include "application.h"
+// #define NDEBUG
+#include <assert.h>
 
 namespace Terabithia {
 
 Application *Application::instance_ = nullptr;
 
+Application &Application::Get() {
+  assert(instance_ != nullptr);
+  return *instance_;
+}
+
 Application::Application()
-    : main_window_("Terabithia", 1920, 1080), imgui_platform_(main_window_) {
+  : main_window_("Terabithia", 1920, 1080), imgui_platform_(main_window_) {
   instance_ = this;
 }
 
@@ -13,14 +20,19 @@ Application::~Application() {}
 
 void Application::Run() {
 
+  EnableDebug();
+
   while (main_window_.ShouldClose() == false) {
     main_window_.PollEvents();
 
-    imgui_platform_.Begin();
+    Clear();
+
+    imgui_platform_.NewFrame();
+    imgui_renderer_.Begin();
 
     editor_.OnImGui();
 
-    imgui_platform_.End();
+    imgui_renderer_.End();
 
     main_window_.Update();
   }

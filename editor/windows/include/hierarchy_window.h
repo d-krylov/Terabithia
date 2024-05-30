@@ -7,7 +7,7 @@ namespace Terabithia {
 
 class HierarchyWindow : public ImGuiWindow {
 public:
-  HierarchyWindow();
+  HierarchyWindow(ImGuiWindowManager &imgui_window_manager);
 
   void OnImGui() override;
 

@@ -22,9 +22,7 @@ namespace std {
 template <typename T> struct hash;
 
 template <> struct hash<Terabithia::UUID> {
-  std::size_t operator()(const Terabithia::UUID &uuid) const {
-    return (uint64_t)uuid;
-  }
+  std::size_t operator()(const Terabithia::UUID &uuid) const { return (uint64_t)uuid; }
 };
 
 } // namespace std

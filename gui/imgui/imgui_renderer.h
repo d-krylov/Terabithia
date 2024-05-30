@@ -1,7 +1,9 @@
 #ifndef IMGUI_RENDERER_H
 #define IMGUI_RENDERER_H
 
-#include "core_types.h"
+#include "graphics.h"
+
+struct ImDrawData;
 
 namespace Terabithia {
 
@@ -14,16 +16,18 @@ public:
   void Begin();
   void End();
 
-  void RenderDrawData();
+  void RenderDrawData(ImDrawData *draw_data);
+
+protected:
+  void SetupRenderState(ImDrawData *draw_data, int32_t framebuffer_w, int32_t framebuffer_h);
+  void CreateFontsTexture();
 
 private:
-  Handle vertex_array_{0};
-  Handle vertex_buffer_{0};
-  Handle index_buffer_{0};
-  Handle font_texture_{0};
-  Handle shader_pipeline_{0};
-  Handle vertex_shader_{0};
-  Handle fragment_shader_{0};
+  VertexArray vertex_array_;
+  VertexBuffer vertex_buffer_;
+  Buffer index_buffer_;
+  GraphicsPipeline graphics_pipeline_;
+  std::unique_ptr<Texture> font_texture_;
 };
 
 } // namespace Terabithia

@@ -14,6 +14,4 @@ Entity Scene::CreateEntity(std::string_view name) {
   return entity;
 }
 
-
-
 } // namespace Terabithia

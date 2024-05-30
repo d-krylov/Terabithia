@@ -7,7 +7,7 @@ namespace Terabithia {
 
 class BrowserWindow : public ImGuiWindow {
 public:
-  BrowserWindow();
+  BrowserWindow(ImGuiWindowManager &imgui_window_manager);
 
   void OnImGui() override;
 

@@ -2,7 +2,8 @@
 
 namespace Terabithia {
 
-ViewportWindow::ViewportWindow() : ImGuiWindow("Viewport") {}
+ViewportWindow::ViewportWindow(ImGuiWindowManager &imgui_window_manager)
+  : ImGuiWindow(imgui_window_manager, "Viewport") {}
 
 void ViewportWindow::OnImGui() {}
 

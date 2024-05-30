@@ -2,13 +2,14 @@
 #define IMGUI_WINDOW_H
 
 #include "core_types.h"
+#include "imgui_windows_manager.h"
 #include <string>
 
 namespace Terabithia {
 
 class ImGuiWindow {
 public:
-  ImGuiWindow(std::string_view name);
+  ImGuiWindow(ImGuiWindowManager &imgui_window_manager, std::string_view name);
 
   void Begin();
   void End();
@@ -19,7 +20,7 @@ public:
 
   Vector2i GetMousePosition() const;
 
-  bool IsVisible() const { return is_visible_; }
+  bool IsVisible() const { return visible_; }
 
   virtual void OnBegin() {}
   virtual void OnEnd() {}
@@ -28,8 +29,9 @@ public:
   virtual int32_t GetFlags();
 
 private:
+  ImGuiWindowManager &imgui_window_manager_;
   std::string name_;
-  bool is_visible_{false};
+  bool visible_{true};
 };
 
 } // namespace Terabithia

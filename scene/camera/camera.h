@@ -11,6 +11,7 @@ private:
   float fov_;
   float near_;
   float far_;
+  float aspect_;
 };
 
 } // namespace Terabithia

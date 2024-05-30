@@ -11,9 +11,6 @@ void Editor::DrawMainMenu() {
 
       if (ImGui::BeginMenu("New")) {
         if (ImGui::MenuItem("Scene")) {
-          for (auto &window : editor_windows_) {
-            window->SetVisibility(true);
-          }
         }
         ImGui::EndMenu();
       }

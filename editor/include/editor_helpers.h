@@ -1,5 +1,5 @@
-#ifndef IMGUI_HELEPERS_H
-#define IMGUI_HELEPERS_H
+#ifndef EDITOR_HELEPERS_H
+#define EDITOR_HELEPERS_H
 
 #include "core_types.h"
 #include <string>
@@ -7,7 +7,8 @@
 namespace Terabithia {
 
 bool PrimaryButton(const std::string &name, const Vector2i &size);
+bool ButtonX(const char *id);
 
 } // namespace Terabithia
 
-#endif // IMGUI_HELEPERS_H
+#endif // EDITOR_HELEPERS_H

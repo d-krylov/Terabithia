@@ -7,7 +7,7 @@ namespace Terabithia {
 
 class ViewportWindow : public ImGuiWindow {
 public:
-  ViewportWindow();
+  ViewportWindow(ImGuiWindowManager &imgui_window_manager);
 
   void OnImGui() override;
 

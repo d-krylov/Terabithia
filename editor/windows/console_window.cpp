@@ -2,7 +2,8 @@
 
 namespace Terabithia {
 
-ConsoleWindow::ConsoleWindow() : ImGuiWindow("Console") {}
+ConsoleWindow::ConsoleWindow(ImGuiWindowManager &imgui_window_manager)
+  : ImGuiWindow(imgui_window_manager, "Console") {}
 
 void ConsoleWindow::OnImGui() {}
 

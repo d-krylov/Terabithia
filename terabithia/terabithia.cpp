@@ -1,4 +1,6 @@
 #include "application.h"
+#include "easyloggingpp/easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
 
 int main() {
 

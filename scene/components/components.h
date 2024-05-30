@@ -2,6 +2,7 @@
 #define COMPONENTS_H
 
 #include "UUID.h"
+#include "transform.h"
 #include <string>
 
 namespace Terabithia {

@@ -7,7 +7,7 @@ namespace Terabithia {
 
 class ConsoleWindow : public ImGuiWindow {
 public:
-  ConsoleWindow();
+  ConsoleWindow(ImGuiWindowManager &imgui_window_manager);
 
   void OnImGui() override;
 

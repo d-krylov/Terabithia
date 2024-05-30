@@ -7,7 +7,7 @@ namespace Terabithia {
 
 class ComponentWindow : public ImGuiWindow {
 public:
-  ComponentWindow();
+  ComponentWindow(ImGuiWindowManager &imgui_window_manager);
 
   void OnImGui() override;
 

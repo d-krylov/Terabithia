@@ -3,9 +3,12 @@
 
 namespace Terabithia {
 
-ImGuiWindow::ImGuiWindow(std::string_view name) : name_(name) {}
+ImGuiWindow::ImGuiWindow(ImGuiWindowManager &imgui_window_manager, std::string_view name)
+  : imgui_window_manager_(imgui_window_manager), name_(name) {
+  imgui_window_manager_.Register(this);
+}
 
-void ImGuiWindow::SetVisibility(bool visible) { is_visible_ = visible; }
+void ImGuiWindow::SetVisibility(bool visible) { visible_ = visible; }
 
 void ImGuiWindow::Begin() {
   bool is_visible = true;
@@ -17,7 +20,7 @@ void ImGuiWindow::Begin() {
 
   bool not_collapsed = ImGui::Begin(name_.c_str(), &is_visible, GetFlags());
 
-  if (is_visible == false) {
+  if (visible_ == false) {
     SetVisibility(false);
   }
 }

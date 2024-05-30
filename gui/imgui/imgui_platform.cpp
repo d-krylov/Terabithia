@@ -1,24 +1,83 @@
 #include "imgui_platform.h"
-#include "filesystem.h"
 #include "gui.h"
 #include "icons.h"
+#include "tools.h"
 #include <GLFW/glfw3.h>
 
 namespace Terabithia {
 
-ImGuiPlatform::ImGuiPlatform(Window &window) {
+void ImGuiPlatform::OnWindowFocus(int focused) {
+  auto &io = ImGui::GetIO();
+  io.AddFocusEvent(focused != 0);
+}
+
+void ImGuiPlatform::OnWindowSize(int, int) {}
+
+void ImGuiPlatform::OnWindowPos(int, int) {}
+
+// clang-format off
+void UpdateKeyModifiers(GLFWwindow* window) {
+  auto& io = ImGui::GetIO();
+  io.AddKeyEvent(ImGuiMod_Ctrl,  (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
+  io.AddKeyEvent(ImGuiMod_Shift, (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)   == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)   == GLFW_PRESS));
+  io.AddKeyEvent(ImGuiMod_Alt,   (glfwGetKey(window, GLFW_KEY_LEFT_ALT)     == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_ALT)     == GLFW_PRESS));
+  io.AddKeyEvent(ImGuiMod_Super, (glfwGetKey(window, GLFW_KEY_LEFT_SUPER)   == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SUPER)   == GLFW_PRESS));
+}
+// clang-format on
+
+void ImGuiPlatform::OnMouseButton(int button, int action, int m) {
+  UpdateKeyModifiers(window_.GetNativeWindow());
+  auto &io = ImGui::GetIO();
+  if (button >= 0 && button < ImGuiMouseButton_COUNT) {
+    io.AddMouseButtonEvent(button, action == GLFW_PRESS);
+  }
+}
+
+void ImGuiPlatform::OnScroll(double xoffset, double yoffset) {
+  auto &io = ImGui::GetIO();
+  io.AddMouseWheelEvent((float)xoffset, (float)yoffset);
+}
+
+void ImGuiPlatform::OnKey(int keycode, int scancode, int action, int m) {}
+
+void ImGuiPlatform::OnCursorPos(double x, double y) {
+  auto &io = ImGui::GetIO();
+  io.AddMousePosEvent((float)x, (float)y);
+}
+
+void ImGuiPlatform::OnCursorEnter(int entered) { ImGuiIO &io = ImGui::GetIO(); }
+
+void ImGuiPlatform::OnChar(unsigned int c) {
+  auto &io = ImGui::GetIO();
+  io.AddInputCharacter(c);
+}
+
+ImGuiPlatform::ImGuiPlatform(Window &window) : window_(window) {
   ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
+  auto &io = ImGui::GetIO();
+  window_.SetWindowEventHandler(this);
   SetFonts();
-
-  ImGui_ImplGlfw_InitForOpenGL(window.GetNativeWindow(), true);
-  ImGui_ImplOpenGL3_Init("#version 450");
 }
 
 ImGuiPlatform::~ImGuiPlatform() {}
+
+void ImGuiPlatform::UpdateMouseData() {}
+
+void ImGuiPlatform::NewFrame() {
+  auto &io = ImGui::GetIO();
+  auto window_size = window_.GetSize();
+  auto framebuffer_size = window_.GetFramebufferSize();
+  io.DisplaySize = ImVec2((float)window_size.x, (float)window_size.y);
+
+  if (window_size.x > 0 && window_size.y > 0) {
+    io.DisplayFramebufferScale = ImVec2((float)framebuffer_size.x / (float)window_size.x,
+                                        (float)framebuffer_size.y / (float)window_size.y);
+  }
+
+  UpdateMouseData();
+  auto imgui_cursor = ImGui::GetMouseCursor();
+  window_.SetCursor(imgui_cursor);
+}
 
 void ImGuiPlatform::SetFonts() {
   ImGuiIO &io = ImGui::GetIO();
@@ -33,8 +92,8 @@ void ImGuiPlatform::SetFonts() {
   font_config.GlyphMinAdvanceX = icon_size;
 
   auto ifont = GetRoot() / "assets/fonts" / FONT_ICON_FILE_NAME_FAS;
-  icon_font_ = io.Fonts->AddFontFromFileTTF(ifont.c_str(), icon_size, &font_config,
-                                            icon_ranges);
+  icon_font_ =
+    io.Fonts->AddFontFromFileTTF(ifont.c_str(), icon_size, &font_config, icon_ranges);
 
   auto font = GetRoot() / "assets/fonts/OpenSans-Regular.ttf";
 
@@ -43,29 +102,6 @@ void ImGuiPlatform::SetFonts() {
   font = GetRoot() / "assets/fonts/OpenSans-SemiBold.ttf";
 
   primary_font_ = io.Fonts->AddFontFromFileTTF(font.c_str(), base_size);
-}
-
-void ImGuiPlatform::Begin() {
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
-}
-
-void ImGuiPlatform::End() {
-  ImGuiIO &io = ImGui::GetIO();
-  ImGui::Render();
-
-  glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-    GLFWwindow *backup_current_context = glfwGetCurrentContext();
-    ImGui::UpdatePlatformWindows();
-    ImGui::RenderPlatformWindowsDefault();
-    glfwMakeContextCurrent(backup_current_context);
-  }
 }
 
 } // namespace Terabithia

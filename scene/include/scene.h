@@ -3,6 +3,7 @@
 
 #include "UUID.h"
 #include "entt/entt.hpp"
+#include "macros.h"
 
 namespace Terabithia {
 
@@ -14,21 +15,23 @@ public:
 
   void Initialize();
 
+  NO_COPY_SEMANTIC(Scene);
+
   [[nodiscard]] entt::registry &GetRegistry() { return registry_; }
 
-  [[nodiscard]] Entity CreateEntity();
-  [[nodiscard]] Entity CreateEntity(std::string_view name);
+  Entity CreateEntity();
+  Entity CreateEntity(std::string_view name);
 
   [[nodiscard]] Entity GetEntityByName(std::string_view name);
   [[nodiscard]] Entity GetEntityByUUID(UUID uuid);
   [[nodiscard]] Entity DuplicateEntity(Entity entity);
+  [[nodiscard]] std::vector<Entity> GetAllEntities();
 
   template <typename... Components> auto GetEntitiesWithTypes() {
     return registry_.group<Components...>();
   }
 
   void DestroyEntity(Entity entity);
-  [[nodiscard]] std::vector<Entity> GetAllEntities();
 
 private:
   std::string name_;

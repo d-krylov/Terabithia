@@ -16,6 +16,10 @@ namespace Terabithia {
 
 #define BASE_BUTTON_SIZE ImVec2(80.0, 30.0)
 
+#define RED IM_COL32(255, 0, 0, 255)
+#define GREEN IM_COL32(0, 255, 0, 255)
+#define BLUE IM_COL32(0, 0, 255, 255)
+
 } // namespace Terabithia
 
 #endif // UI_H

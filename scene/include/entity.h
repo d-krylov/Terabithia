@@ -15,17 +15,13 @@ public:
     return scene_->GetRegistry().emplace<T>(entity_, std::forward<Args>(args)...);
   }
 
-  template <typename T> T &GetComponent() {
-    return scene_->GetRegistry().get<T>(entity_);
-  }
+  template <typename T> T &GetComponent() { return scene_->GetRegistry().get<T>(entity_); }
 
   template <typename T> const T &GetComponent() const {
     return scene_->GetRegistry().get<T>(entity_);
   }
 
-  template <typename T> void RemoveComponent() {
-    scene_->GetRegistry().remove<T>(entity_);
-  }
+  template <typename T> void RemoveComponent() { scene_->GetRegistry().remove<T>(entity_); }
 
   template <typename T> bool HasComponent() {
     return scene_->GetRegistry().all_of<T>(entity_);

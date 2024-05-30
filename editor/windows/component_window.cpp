@@ -1,51 +1,40 @@
 #include "component_window.h"
 #include "application.h"
+#include "components.h"
+#include "editor_helpers.h"
 #include "gui.h"
 
 namespace Terabithia {
 
-ComponentWindow::ComponentWindow() : ImGuiWindow("Components") {}
+ComponentWindow::ComponentWindow(ImGuiWindowManager &imgui_window_manager)
+  : ImGuiWindow(imgui_window_manager, "Components") {}
 
 void ComponentWindow::DrawTransformComponent() {
+  Vector3f data;
   if (ImGui::CollapsingHeader("Transform")) {
-
-    auto table_flags =
-        ImGuiTableFlags_BordersInner | ImGuiTableFlags_SizingStretchProp;
-
-    float x, y, z;
-
-    if (ImGui::BeginTable("Transform table", 4, table_flags)) {
-
-      if (ImGui::TableNextColumn()) {
-        ImGui::PushFont(Application::Get().GetPlatform().GetPrimaryFont());
-        ImGui::Text("Location");
-        ImGui::Text("Rotation");
-        ImGui::Text("Scale");
-        ImGui::PopFont();
-      }
-
-      if (ImGui::TableNextColumn()) {
-        ImGui::InputFloat("X##Location", &x);
-        ImGui::InputFloat("X##Rotation", &x);
-        ImGui::InputFloat("X##Scale", &x);
-      }
-
-      if (ImGui::TableNextColumn()) {
-        ImGui::InputFloat("Y##Location", &y);
-        ImGui::InputFloat("Y##Rotation", &y);
-        ImGui::InputFloat("Y##Scale", &y);
-      }
-
-      if (ImGui::TableNextColumn()) {
-        ImGui::InputFloat("Z##Location", &z);
-        ImGui::InputFloat("Z##Rotation", &z);
-        ImGui::InputFloat("Z##Scale", &z);
-      }
-      ImGui::EndTable();
-    }
+    ImGui::Text("Location");
+    ImGui::SameLine();
+    ImGui::InputFloat3("##Location", glm::value_ptr(data));
   }
 }
 
-void ComponentWindow::OnImGui() { DrawTransformComponent(); }
+void ComponentWindow::OnImGui() {
+
+  auto &application = Application::Get();
+
+  const auto &selected_entities =
+    application.GetEditor().GetSelectionManager().GetSelectedEntities();
+
+  if (selected_entities.size() != 1) {
+    return;
+  }
+
+  auto &registry = application.GetScene().GetRegistry();
+
+  auto *transform = registry.try_get<Transform>(selected_entities.front());
+
+  if (transform != nullptr) {
+  }
+}
 
 } // namespace Terabithia
