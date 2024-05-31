@@ -2,6 +2,8 @@
 #define COMPONENTS_H
 
 #include "UUID.h"
+#include "light.h"
+#include "model.h"
 #include "transform.h"
 #include <string>
 

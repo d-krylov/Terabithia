@@ -82,6 +82,9 @@ Vector2f Window::GetCursorPosition() const {
   return Vector2f(position);
 }
 
+bool Window::IsFocused() const {
+  return glfwGetWindowAttrib(native_window_, GLFW_FOCUSED) != 0;
+}
 // clang-format off
 void Window::SetCursors() {
   mouse_cursors_[MouseCursor::ARROW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);

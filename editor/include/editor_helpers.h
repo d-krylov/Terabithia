@@ -7,7 +7,7 @@
 namespace Terabithia {
 
 bool PrimaryButton(const std::string &name, const Vector2i &size);
-bool ButtonX(const char *id);
+void InputVector3(std::string_view item_name, Vector3f &value);
 
 } // namespace Terabithia
 

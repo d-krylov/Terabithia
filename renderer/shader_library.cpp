@@ -1,3 +1,7 @@
 #include "shader_library.h"
 
-namespace Terabithia {} // namespace Terabithia
+namespace Terabithia {
+
+ShaderLibrary::ShaderLibrary() {}
+
+} // namespace Terabithia

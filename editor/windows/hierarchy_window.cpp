@@ -27,32 +27,57 @@ void HierarchyWindow::AddEntity() {
 
   if (ImGui::Selectable("Light")) {
     auto light = scene.CreateEntity("Light");
+    light.AddComponent<Light>();
+  }
+
+  if (ImGui::Selectable("Mesh")) {
+    auto mesh = scene.CreateEntity("Mesh");
+  }
+
+  if (ImGui::Selectable("Lua Script")) {
+    auto script = scene.CreateEntity("LuaScript");
   }
 
   if (ImGui::BeginMenu("Primitive")) {
 
     if (ImGui::MenuItem("Plane")) {
+      auto primitive = scene.CreateEntity("Plane");
+      primitive.AddComponent<Model>();
     }
 
     if (ImGui::MenuItem("Box")) {
+      auto primitive = scene.CreateEntity("Box");
+      primitive.AddComponent<Model>();
     }
 
     if (ImGui::MenuItem("Sphere")) {
+      auto primitive = scene.CreateEntity("Sphere");
+      primitive.AddComponent<Model>();
     }
 
     if (ImGui::MenuItem("Cylinder")) {
+      auto primitive = scene.CreateEntity("Cylinder");
+      primitive.AddComponent<Model>();
     }
 
     if (ImGui::MenuItem("Cone")) {
+      auto primitive = scene.CreateEntity("Cone");
+      primitive.AddComponent<Model>();
     }
 
     if (ImGui::MenuItem("Torus")) {
+      auto primitive = scene.CreateEntity("Torus");
+      primitive.AddComponent<Model>();
     }
 
     if (ImGui::MenuItem("Capsule")) {
+      auto primitive = scene.CreateEntity("Capsule");
+      primitive.AddComponent<Model>();
     }
 
     if (ImGui::MenuItem("Terrain")) {
+      auto primitive = scene.CreateEntity("Terrain");
+      primitive.AddComponent<Model>();
     }
 
     ImGui::EndMenu();

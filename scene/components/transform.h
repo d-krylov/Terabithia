@@ -7,6 +7,8 @@ namespace Terabithia {
 
 class Transform {
 public:
+  Vector3f &GetLocation() { return local_position_; }
+
 private:
   Vector3f local_position_;
   Quaternion local_rotation_;

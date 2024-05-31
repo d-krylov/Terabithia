@@ -34,6 +34,7 @@ void ComponentWindow::OnImGui() {
   auto *transform = registry.try_get<Transform>(selected_entities.front());
 
   if (transform != nullptr) {
+    InputVector3("Location", transform->GetLocation());
   }
 }
 

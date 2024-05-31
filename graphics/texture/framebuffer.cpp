@@ -4,6 +4,8 @@ namespace Terabithia {
 
 Framebuffer::Framebuffer() { glCreateFramebuffers(1, &framebuffer_); }
 
+Framebuffer::~Framebuffer() { glDeleteFramebuffers(1, &framebuffer_); }
+
 bool Framebuffer::Verify() {
   auto kind = static_cast<uint16_t>(FramebufferKind::FULL);
   return glCheckNamedFramebufferStatus(framebuffer_, kind) == GL_FRAMEBUFFER_COMPLETE;
@@ -24,6 +26,8 @@ void Framebuffer::Attach(const FramebufferAttachment &attachment) {
                                    *attachment.renderbuffer_);
   }
 }
+
+void Framebuffer::Attach(const std::initializer_list<FramebufferAttachment> &attachments) {}
 
 void Framebuffer::Bind() {
   glBindFramebuffer(static_cast<uint16_t>(FramebufferKind::FULL), framebuffer_);

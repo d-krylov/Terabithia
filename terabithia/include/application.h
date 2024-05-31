@@ -4,6 +4,7 @@
 #include "editor.h"
 #include "imgui_platform.h"
 #include "imgui_renderer.h"
+#include "renderer.h"
 #include "scene.h"
 
 namespace Terabithia {
@@ -29,12 +30,15 @@ public:
   [[nodiscard]] Editor &GetEditor() { return editor_; }
   [[nodiscard]] const Editor &GetEditor() const { return editor_; }
 
+  [[nodiscard]] void GetStatistics();
+
 private:
   Window main_window_;
   ImGuiPlatform imgui_platform_;
   ImGuiRenderer imgui_renderer_;
   Scene scene_;
   Editor editor_;
+  Renderer renderer_;
 
   static Application *instance_;
 };

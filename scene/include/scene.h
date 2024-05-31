@@ -18,6 +18,7 @@ public:
   NO_COPY_SEMANTIC(Scene);
 
   [[nodiscard]] entt::registry &GetRegistry() { return registry_; }
+  [[nodiscard]] const entt::registry &GetRegistry() const { return registry_; }
 
   Entity CreateEntity();
   Entity CreateEntity(std::string_view name);

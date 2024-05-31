@@ -6,4 +6,6 @@ Renderer::Renderer() {}
 
 void Renderer::ProcessMesh(const Mesh &mesh) {}
 
+void Renderer::Begin(const Scene &scene) {}
+
 } // namespace Terabithia

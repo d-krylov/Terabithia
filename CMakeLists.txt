@@ -37,18 +37,17 @@ set(IMGUI_SOURCES
 )
 
 set(IMGUIZMO_SOURCES
-  ${PROJECT_SOURCE_DIR}/third_party/imguizmo/sources/GraphEditor.cpp
-  ${PROJECT_SOURCE_DIR}/third_party/imguizmo/sources/ImCurveEdit.cpp
-  ${PROJECT_SOURCE_DIR}/third_party/imguizmo/sources/ImGradient.cpp
-  ${PROJECT_SOURCE_DIR}/third_party/imguizmo/sources/ImGuizmo.cpp
-  ${PROJECT_SOURCE_DIR}/third_party/imguizmo/sources/ImSequencer.cpp
+  ${PROJECT_SOURCE_DIR}/external/imguizmo/sources/GraphEditor.cpp
+  ${PROJECT_SOURCE_DIR}/external/imguizmo/sources/ImCurveEdit.cpp
+  ${PROJECT_SOURCE_DIR}/external/imguizmo/sources/ImGradient.cpp
+  ${PROJECT_SOURCE_DIR}/external/imguizmo/sources/ImGuizmo.cpp
+  ${PROJECT_SOURCE_DIR}/external/imguizmo/sources/ImSequencer.cpp
 )
 
 set(CORE_SOURCES
   ${PROJECT_SOURCE_DIR}/core/UUID.cpp
   ${PROJECT_SOURCE_DIR}/core/tools.cpp
   ${PROJECT_SOURCE_DIR}/core/image.cpp
-  #${PROJECT_SOURCE_DIR}/base/base_logger.cpp
 )
 
 set(GRAPHICS_SOURCES
@@ -63,7 +62,6 @@ set(GRAPHICS_SOURCES
   ${PROJECT_SOURCE_DIR}/graphics/graphics_pipeline/graphics_pipeline.cpp
   ${PROJECT_SOURCE_DIR}/graphics/graphics_types.cpp
   ${PROJECT_SOURCE_DIR}/graphics/commands.cpp
-  #${PROJECT_SOURCE_DIR}/platform/shader_information.cpp
 )
 
 set(EDITOR_SOURCES
@@ -76,15 +74,12 @@ set(EDITOR_SOURCES
   ${PROJECT_SOURCE_DIR}/editor/windows/browser_window.cpp
   ${PROJECT_SOURCE_DIR}/editor/editor_helpers.cpp
   ${PROJECT_SOURCE_DIR}/editor/selection_manager.cpp
-  #${PROJECT_SOURCE_DIR}/editor/windows/shader_node_window.cpp
-  #${PROJECT_SOURCE_DIR}/editor/windows/material_window.cpp
-  #${PROJECT_SOURCE_DIR}/editor/windows/status_bar.cpp
-  #${PROJECT_SOURCE_DIR}/editor/windows/camera_window.cpp
 )
 
 set(RENDERER_SOURCES
   ${PROJECT_SOURCE_DIR}/renderer/renderer.cpp
   ${PROJECT_SOURCE_DIR}/renderer/shader_library.cpp
+  ${PROJECT_SOURCE_DIR}/renderer/mesh_allocator.cpp
 )
 
 set(GUI_SOURCES
@@ -101,7 +96,7 @@ set(SCENE_SOURCES
   ${PROJECT_SOURCE_DIR}/scene/camera/camera.cpp
   #${PROJECT_SOURCE_DIR}/scene/light.cpp
 
-  #${PROJECT_SOURCE_DIR}/scene/editor_camera.cpp
+  ${PROJECT_SOURCE_DIR}/scene/components/model.cpp
   ${PROJECT_SOURCE_DIR}/scene/components/transform.cpp
 )
 
@@ -112,7 +107,7 @@ set(MESH_SOURCES
 
 set(TERABITHIA_SOURCES
   ${MESH_SOURCES}
-  #${IMGUIZMO_SOURCES}
+  ${IMGUIZMO_SOURCES}
   ${RENDERER_SOURCES}
   ${PROJECT_SOURCE_DIR}/external/imguifiledialog/ImGuiFileDialog.cpp
   ${GRAPHICS_SOURCES}
@@ -137,7 +132,6 @@ set(TERABITHIA_INCLUDE_DIR
   ${PROJECT_SOURCE_DIR}/scene/include
   ${PROJECT_SOURCE_DIR}/terabithia/include
   ${PROJECT_SOURCE_DIR}/scene/components
-  ${PROJECT_SOURCE_DIR}/scene/light
   ${PROJECT_SOURCE_DIR}/scene/camera
   ${PROJECT_SOURCE_DIR}/graphics/include
   ${PROJECT_SOURCE_DIR}/graphics/texture
@@ -153,7 +147,7 @@ set(IMGUI_INCLUDE_DIR
   ${PROJECT_SOURCE_DIR}/external/imgui/include
   ${PROJECT_SOURCE_DIR}/external/imgui/backend/
   ${PROJECT_SOURCE_DIR}/external/imguifiledialog/include
-  #${PROJECT_SOURCE_DIR}/external/imguizmo/include
+  ${PROJECT_SOURCE_DIR}/external/imguizmo/include
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-volatile")

@@ -37,6 +37,13 @@ public:
   [[nodiscard]] BufferTarget GetTarget() const { return target_; }
   [[nodiscard]] BufferStorage GetStorage() const { return storage_; }
 
+  template <typename T> std::span<T> MapRange(std::size_t offset, std::size_t count) {
+    auto byte_offset = offset * sizeof(T);
+    auto byte_count = count * sizeof(T);
+    auto raw = reinterpret_cast<T *>(mapped_data_.data());
+    return std::span<T>(raw, mapped_data_.size_bytes() / sizeof(T));
+  }
+
 protected:
   void Destroy();
 

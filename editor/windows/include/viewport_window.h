@@ -11,6 +11,8 @@ public:
 
   void OnImGui() override;
 
+  void DrawGuizmo();
+
 private:
 };
 

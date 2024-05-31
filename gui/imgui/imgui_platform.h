@@ -34,10 +34,12 @@ public:
 
 protected:
   void UpdateMouseData();
+  void UpdateMouseCursor();
 
 private:
   ImFont *primary_font_{nullptr};
   ImFont *icon_font_{nullptr};
+  Vector2f mouse_position_;
   Window &window_;
 };
 

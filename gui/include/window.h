@@ -48,6 +48,8 @@ public:
   [[nodiscard]] float GetAspectRatio() const;
   [[nodiscard]] WindowEventHandler *GetEventHandler() const { return window_event_handler_; }
 
+  [[nodiscard]] bool IsFocused() const;
+
   void SetCursorPosition(const Vector2d &position);
   void SetWindowEventHandler(WindowEventHandler *handler);
   void SetCursor(int32_t index);

@@ -42,10 +42,19 @@ void ImGuiPlatform::OnKey(int keycode, int scancode, int action, int m) {}
 
 void ImGuiPlatform::OnCursorPos(double x, double y) {
   auto &io = ImGui::GetIO();
+  mouse_position_ = Vector2f(x, y);
   io.AddMousePosEvent((float)x, (float)y);
 }
 
-void ImGuiPlatform::OnCursorEnter(int entered) { ImGuiIO &io = ImGui::GetIO(); }
+void ImGuiPlatform::OnCursorEnter(int entered) {
+  ImGuiIO &io = ImGui::GetIO();
+  if (entered) {
+    io.AddMousePosEvent(mouse_position_.x, mouse_position_.y);
+  } else if (entered == false) {
+    mouse_position_ = Vector2f(io.MousePos.x, io.MousePos.y);
+    io.AddMousePosEvent(-FLT_MAX, -FLT_MAX);
+  }
+}
 
 void ImGuiPlatform::OnChar(unsigned int c) {
   auto &io = ImGui::GetIO();
@@ -61,7 +70,23 @@ ImGuiPlatform::ImGuiPlatform(Window &window) : window_(window) {
 
 ImGuiPlatform::~ImGuiPlatform() {}
 
-void ImGuiPlatform::UpdateMouseData() {}
+void ImGuiPlatform::UpdateMouseData() {
+  auto &io = ImGui::GetIO();
+  if (window_.IsFocused()) {
+    if (io.WantSetMousePos) {
+      window_.SetCursorPosition(Vector2d(io.MousePos.x, io.MousePos.y));
+    }
+    auto cursor_position = window_.GetCursorPosition();
+    mouse_position_ = cursor_position;
+    io.AddMousePosEvent(cursor_position.x, cursor_position.y);
+  }
+}
+
+void ImGuiPlatform::UpdateMouseCursor() {
+  ImGuiIO &io = ImGui::GetIO();
+  ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
+  {}
+}
 
 void ImGuiPlatform::NewFrame() {
   auto &io = ImGui::GetIO();
