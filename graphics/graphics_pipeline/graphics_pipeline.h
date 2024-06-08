@@ -14,6 +14,8 @@ public:
   GraphicsPipeline();
   GraphicsPipeline(const std::initializer_list<std::filesystem::path> &paths);
 
+  NO_COPY_SEMANTIC(GraphicsPipeline);
+
   ~GraphicsPipeline();
 
   operator Handle() const { return graphics_pipeline_; }

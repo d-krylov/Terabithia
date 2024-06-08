@@ -16,13 +16,16 @@ public:
 
   NO_COPY_SEMANTIC(Buffer);
 
-  template <typename T> void SetData(std::span<T> data) { SetData(std::as_bytes(data)); }
-  template <typename T> void SetData(const std::vector<T> &data) {
-    std::span<const T> span_data(data.data(), data.size());
-    SetData(std::as_bytes(span_data));
+  template <typename T> std::size_t PushData(std::span<T> data) {
+    return PushData(std::as_bytes(data));
   }
 
-  void SetData(std::span<const std::byte> data);
+  template <typename T> std::size_t PushData(const std::vector<T> &data) {
+    std::span<const T> span_data(data.data(), data.size());
+    return PushData(std::as_bytes(span_data));
+  }
+
+  std::size_t PushData(std::span<const std::byte> data);
   void FlushRange(std::size_t offset, std::size_t size);
   void MapRange(std::size_t offset, std::size_t size);
   void Unmap();
@@ -44,8 +47,12 @@ public:
     return std::span<T>(raw, mapped_data_.size_bytes() / sizeof(T));
   }
 
+  void Resize(std::size_t size);
+  void Reset();
+
 protected:
   void Destroy();
+  void CreateBuffer();
 
 private:
   Handle buffer_{0};

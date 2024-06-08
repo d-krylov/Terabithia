@@ -20,8 +20,8 @@ BlendInformation GetBlendInformation() {
 // clang-format on
 
 ImGuiRenderer::ImGuiRenderer()
-  : vertex_array_(), vertex_buffer_(10_MiB, GetImGuiVertexFormat()),
-    index_buffer_(BufferTarget::ELEMENT_ARRAY_BUFFER, 10_MiB),
+  : vertex_array_(), vertex_buffer_(20_MiB, GetImGuiVertexFormat()),
+    index_buffer_(BufferTarget::ELEMENT_ARRAY_BUFFER, 20_MiB),
     graphics_pipeline_{GetRoot() / "shaders/gui.vert", GetRoot() / "shaders/gui.frag"} {
   CreateFontsTexture();
   vertex_array_.AddVertexBuffer(vertex_buffer_);
@@ -43,6 +43,13 @@ void ImGuiRenderer::End() {
   RenderDrawData(ImGui::GetDrawData());
 }
 
+void ImGuiRenderer::SetBuffers(const ImDrawList *commands) {
+  vertex_buffer_.Reset();
+  index_buffer_.Reset();
+  vertex_buffer_.PushData(std::span(commands->VtxBuffer.Data, commands->VtxBuffer.Size));
+  index_buffer_.PushData(std::span(commands->IdxBuffer.Data, commands->IdxBuffer.Size));
+}
+
 void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
   int framebuffer_w = (int)(draw_data->DisplaySize.x * draw_data->FramebufferScale.x);
   int framebuffer_h = (int)(draw_data->DisplaySize.y * draw_data->FramebufferScale.y);
@@ -56,9 +63,7 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
 
   for (uint32_t n = 0; n < draw_data->CmdListsCount; n++) {
     const auto *commands = draw_data->CmdLists[n];
-    vertex_buffer_.SetData(std::span(commands->VtxBuffer.Data, commands->VtxBuffer.Size));
-    index_buffer_.SetData(std::span(commands->IdxBuffer.Data, commands->IdxBuffer.Size));
-
+    SetBuffers(commands);
     for (uint32_t i = 0; i < commands->CmdBuffer.Size; i++) {
       const auto *command = &commands->CmdBuffer[i];
       if (command->UserCallback != nullptr) {
@@ -91,6 +96,7 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
 
   SetScissor(false);
   SetBlending(false);
+  SetDepthTesting(true);
 }
 
 void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int32_t fbw, int32_t fbh) {

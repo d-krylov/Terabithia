@@ -1,5 +1,6 @@
 #include "editor_helpers.h"
 #include "gui.h"
+#include "icons.h"
 
 namespace Terabithia {
 
@@ -36,6 +37,7 @@ ImVec2 GetTextSize(std::string_view s) {
 }
 
 void InputVector3(std::string_view item_name, Vector3f &value) {
+  ImGui::PushID(item_name.data());
   float size = ImGui::GetContentRegionAvail().x - GetTextSize(item_name).x;
   auto button_size = GetTextSize("X");
   auto item_width = size / 3.0f - button_size.x - 2.0f * ImGui::GetStyle().ItemSpacing.x;
@@ -49,6 +51,19 @@ void InputVector3(std::string_view item_name, Vector3f &value) {
     if (ColorButton(axis_name[i].data(), axis_color[i])) {
       value[i] -= 1.0;
     }
+  }
+  ImGui::PopID();
+}
+
+void ShowCheckmark(bool f) {
+  if (f) {
+    ImGui::PushStyleColor(ImGuiCol_Text, GREEN);
+    ImGui::Text(ICON_FA_CHECK);
+    ImGui::PopStyleColor();
+  } else {
+    ImGui::PushStyleColor(ImGuiCol_Text, RED);
+    ImGui::Text(ICON_FA_TIMES);
+    ImGui::PopStyleColor();
   }
 }
 

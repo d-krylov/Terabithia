@@ -27,6 +27,8 @@ public:
     return scene_->GetRegistry().all_of<T>(entity_);
   }
 
+  bool IsValid() const { return (entity_ != entt::null) && (scene_ != nullptr); }
+
   operator entt::entity() const { return entity_; }
   operator bool() const { return entity_ != entt::null; }
   operator uint32_t() const { return (uint32_t)entity_; }

@@ -13,7 +13,11 @@ public:
 
   void DrawGuizmo();
 
+  [[nodiscard]] const Vector2i &GetSize() const { return size_; }
+
 private:
+  bool grid_{true};
+  Vector2i size_;
 };
 
 } // namespace Terabithia

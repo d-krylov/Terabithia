@@ -4,6 +4,7 @@
 #include "graphics.h"
 
 struct ImDrawData;
+struct ImDrawList;
 
 namespace Terabithia {
 
@@ -21,6 +22,7 @@ public:
 protected:
   void SetupRenderState(ImDrawData *draw_data, int32_t framebuffer_w, int32_t framebuffer_h);
   void CreateFontsTexture();
+  void SetBuffers(const ImDrawList *commands);
 
 private:
   VertexArray vertex_array_;

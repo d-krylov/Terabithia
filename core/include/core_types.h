@@ -3,6 +3,8 @@
 
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtx/normal.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace Terabithia {
 
@@ -25,6 +27,14 @@ using Quaternion = glm::quat;
 
 constexpr inline std::size_t operator""_KiB(unsigned long long int x) { return 1024ULL * x; }
 constexpr inline std::size_t operator""_MiB(unsigned long long int x) { return 1024_KiB * x; }
+
+constexpr Vector3f X_ = Vector3f(1.0f, 0.0f, 0.0f);
+constexpr Vector3f Y_ = Vector3f(0.0f, 1.0f, 0.0f);
+constexpr Vector3f Z_ = Vector3f(0.0f, 0.0f, 1.0f);
+
+constexpr Vector3f WORLD_UP = Y_;
+
+constexpr float PI_ = glm::pi<float>();
 
 } // namespace Terabithia
 

@@ -9,6 +9,10 @@ uniform mat4 u_projection_matrix;
 layout (location = 0) out vec2 out_fragment_uv;
 layout (location = 1) out vec4 out_fragment_color;
 
+out gl_PerVertex {
+  vec4 gl_Position;
+};
+
 void main() {
   out_fragment_uv = in_uv;
   out_fragment_color = in_color; 

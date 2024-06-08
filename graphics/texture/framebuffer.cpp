@@ -6,9 +6,9 @@ Framebuffer::Framebuffer() { glCreateFramebuffers(1, &framebuffer_); }
 
 Framebuffer::~Framebuffer() { glDeleteFramebuffers(1, &framebuffer_); }
 
-bool Framebuffer::Verify() {
+FramebufferStatus Framebuffer::GetStatus() const {
   auto kind = static_cast<uint16_t>(FramebufferKind::FULL);
-  return glCheckNamedFramebufferStatus(framebuffer_, kind) == GL_FRAMEBUFFER_COMPLETE;
+  return FramebufferStatus(glCheckNamedFramebufferStatus(framebuffer_, kind));
 }
 
 void Framebuffer::Attach(const FramebufferAttachment &attachment) {

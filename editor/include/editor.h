@@ -18,15 +18,18 @@ public:
   void OnImGui();
 
   [[nodiscard]] SelectionManager &GetSelectionManager() { return selection_manager_; }
-
   [[nodiscard]] const SelectionManager &GetSelectionManager() const {
     return selection_manager_;
   }
+
+  [[nodiscard]] EditorCamera &GetEditorCamera() { return editor_camera_; }
+  [[nodiscard]] const EditorCamera &GetEditorCamera() const { return editor_camera_; }
 
 protected:
   void DrawMainMenu();
 
 private:
+  EditorCamera editor_camera_;
   ImGuiWindowManager imgui_window_manager_;
   SelectionManager selection_manager_;
   BrowserWindow browser_window_;
@@ -34,6 +37,8 @@ private:
   ConsoleWindow console_window_;
   ViewportWindow viewport_window_;
   HierarchyWindow hierarchy_window_;
+  CameraWindow camera_window_;
+  SettingsWindow settings_window_;
 };
 
 } // namespace Terabithia

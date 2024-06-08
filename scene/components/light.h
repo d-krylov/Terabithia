@@ -7,6 +7,8 @@ namespace Terabithia {
 
 class Light {
 public:
+  Vector3f &GetColor() { return color_; }
+
 private:
   Vector3f color_;
 };

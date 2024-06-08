@@ -30,11 +30,30 @@ void ComponentWindow::OnImGui() {
   }
 
   auto &registry = application.GetScene().GetRegistry();
-
   auto *transform = registry.try_get<Transform>(selected_entities.front());
 
   if (transform != nullptr) {
-    InputVector3("Location", transform->GetLocation());
+    if (ImGui::CollapsingHeader("Transform")) {
+      InputVector3("Location", transform->GetPosition());
+      InputVector3("Rotation", transform->GetRotation());
+      InputVector3("Scale   ", transform->GetScale());
+    }
+  }
+
+  auto *model = registry.try_get<Model>(selected_entities.front());
+
+  if (model != nullptr) {
+    if (ImGui::CollapsingHeader("Model")) {
+      ImGui::Text(model->GetPath().c_str());
+    }
+  }
+
+  auto *light = registry.try_get<Light>(selected_entities.front());
+
+  if (light != nullptr) {
+    if (ImGui::CollapsingHeader("Light")) {
+      InputVector3("Color", light->GetColor());
+    }
   }
 }
 

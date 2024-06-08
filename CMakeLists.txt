@@ -23,17 +23,11 @@ add_clang_format_target(format)
 
 add_definitions(-DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
-set(IMGUI_BACKEND_SOURCES
-  ${PROJECT_SOURCE_DIR}/external/imgui/backend/imgui_impl_glfw.cpp
-  ${PROJECT_SOURCE_DIR}/external/imgui/backend/imgui_impl_opengl3.cpp
-)
-
 set(IMGUI_SOURCES
   ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_draw.cpp
   ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_tables.cpp
   ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_widgets.cpp
   ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui.cpp
-  ${IMGUI_BACKEND_SOURCES}
 )
 
 set(IMGUIZMO_SOURCES
@@ -48,6 +42,7 @@ set(CORE_SOURCES
   ${PROJECT_SOURCE_DIR}/core/UUID.cpp
   ${PROJECT_SOURCE_DIR}/core/tools.cpp
   ${PROJECT_SOURCE_DIR}/core/image.cpp
+  ${PROJECT_SOURCE_DIR}/core/cubemap.cpp
 )
 
 set(GRAPHICS_SOURCES
@@ -72,6 +67,8 @@ set(EDITOR_SOURCES
   ${PROJECT_SOURCE_DIR}/editor/windows/main_menu.cpp
   ${PROJECT_SOURCE_DIR}/editor/windows/console_window.cpp
   ${PROJECT_SOURCE_DIR}/editor/windows/browser_window.cpp
+  ${PROJECT_SOURCE_DIR}/editor/windows/camera_window.cpp
+  ${PROJECT_SOURCE_DIR}/editor/windows/settings_window.cpp
   ${PROJECT_SOURCE_DIR}/editor/editor_helpers.cpp
   ${PROJECT_SOURCE_DIR}/editor/selection_manager.cpp
 )
@@ -91,9 +88,14 @@ set(GUI_SOURCES
   ${PROJECT_SOURCE_DIR}/gui/imgui/imgui_windows_manager.cpp
 )
 
+set(RESOURCE_SOURCES
+  ${PROJECT_SOURCE_DIR}/resource/resource_manager.cpp
+)
+
 set(SCENE_SOURCES
   ${PROJECT_SOURCE_DIR}/scene/scene.cpp
   ${PROJECT_SOURCE_DIR}/scene/camera/camera.cpp
+  ${PROJECT_SOURCE_DIR}/scene/camera/editor_camera.cpp
   #${PROJECT_SOURCE_DIR}/scene/light.cpp
 
   ${PROJECT_SOURCE_DIR}/scene/components/model.cpp
@@ -103,24 +105,35 @@ set(SCENE_SOURCES
 set(MESH_SOURCES 
   ${PROJECT_SOURCE_DIR}/mesh/mesh.cpp
   ${PROJECT_SOURCE_DIR}/mesh/mesh_factory.cpp
+  ${PROJECT_SOURCE_DIR}/mesh/model_loader/model_loader_wavefront.cpp
+  ${PROJECT_SOURCE_DIR}/mesh/model_loader/model_loader_khronos.cpp
+)
+
+set(EXTERNAL_SOURCES
+  ${PROJECT_SOURCE_DIR}/external/glad/glad.c
+  ${PROJECT_SOURCE_DIR}/external/simdjson/simdjson.cpp
+  ${PROJECT_SOURCE_DIR}/external/tinyobjloader/tiny_obj_loader.cc
+  ${PROJECT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
+  ${PROJECT_SOURCE_DIR}/external/fastgltf/sources/base64.cpp
+  ${PROJECT_SOURCE_DIR}/external/fastgltf/sources/fastgltf.cpp
+  ${PROJECT_SOURCE_DIR}/external/imguifiledialog/ImGuiFileDialog.cpp
 )
 
 set(TERABITHIA_SOURCES
   ${MESH_SOURCES}
   ${IMGUIZMO_SOURCES}
   ${RENDERER_SOURCES}
-  ${PROJECT_SOURCE_DIR}/external/imguifiledialog/ImGuiFileDialog.cpp
   ${GRAPHICS_SOURCES}
   ${CORE_SOURCES}
   ${SCENE_SOURCES}
   ${EDITOR_SOURCES}
   ${IMGUI_SOURCES}
   ${GUI_SOURCES}
+  ${EXTERNAL_SOURCES}
+  ${RESOURCE_SOURCES}
   ${PROJECT_SOURCE_DIR}/terabithia/terabithia.cpp
   ${PROJECT_SOURCE_DIR}/terabithia/application.cpp
-  ${PROJECT_SOURCE_DIR}/external/glad/glad.c
-  ${PROJECT_SOURCE_DIR}/external/tinyobjloader/tiny_obj_loader.cc
-  ${PROJECT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
+  ${PROJECT_SOURCE_DIR}/terabithia/context.cpp
 )
 
 set(TERABITHIA_INCLUDE_DIR
@@ -139,13 +152,14 @@ set(TERABITHIA_INCLUDE_DIR
   ${PROJECT_SOURCE_DIR}/graphics/vertex
   ${PROJECT_SOURCE_DIR}/graphics/buffer
   ${PROJECT_SOURCE_DIR}/mesh/include
+  ${PROJECT_SOURCE_DIR}/mesh/model_loader
   ${PROJECT_SOURCE_DIR}/mesh/material
   ${PROJECT_SOURCE_DIR}/renderer/include
+  ${PROJECT_SOURCE_DIR}/resource/include
 )
 
 set(IMGUI_INCLUDE_DIR
   ${PROJECT_SOURCE_DIR}/external/imgui/include
-  ${PROJECT_SOURCE_DIR}/external/imgui/backend/
   ${PROJECT_SOURCE_DIR}/external/imguifiledialog/include
   ${PROJECT_SOURCE_DIR}/external/imguizmo/include
 )
@@ -158,13 +172,10 @@ add_executable(${PROJECT_NAME} ${TERABITHIA_SOURCES})
 #target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-
-  #${PROJECT_SOURCE_DIR}/third_party/hopscotch/include/tsl/
-  #${PROJECT_SOURCE_DIR}/third_party/xxHash/
-  #${PROJECT_SOURCE_DIR}/external/signals/
   #${JoltPhysics_SOURCE_DIR}
   ${IMGUI_INCLUDE_DIR}
   ${PROJECT_SOURCE_DIR}/external/
+  ${PROJECT_SOURCE_DIR}/external/fastgltf/include
   ${TERABITHIA_INCLUDE_DIR}
 )
 

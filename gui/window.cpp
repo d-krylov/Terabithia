@@ -1,4 +1,5 @@
 #include "window.h"
+#include "asserts.h"
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
@@ -85,6 +86,11 @@ Vector2f Window::GetCursorPosition() const {
 bool Window::IsFocused() const {
   return glfwGetWindowAttrib(native_window_, GLFW_FOCUSED) != 0;
 }
+
+void Window::SetInputMode(int32_t mode, int32_t value) {
+  glfwSetInputMode(native_window_, mode, value);
+}
+
 // clang-format off
 void Window::SetCursors() {
   mouse_cursors_[MouseCursor::ARROW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);

@@ -1,4 +1,5 @@
 #include "texture.h"
+#include "cubemap.h"
 #include "image.h"
 
 namespace Terabithia {
@@ -15,6 +16,8 @@ Texture::Texture(const Image &image)
   : Texture(image.GetWidth(), image.GetHeight(), image.GetFormat()) {
   SetData(image.GetData());
 }
+
+Texture::Texture(const CubeMap &cubemap) {}
 
 Texture::~Texture() { Destroy(); }
 
@@ -65,6 +68,9 @@ void Texture::SetData(std::span<const std::byte> data) {
                         static_cast<uint16_t>(format_type.second), data.data());
     break;
   case 3:
+    glTextureSubImage3D(texture_, 0, 0, 0, 0, size_.x, size_.y, depth_,
+                        static_cast<uint16_t>(format_type.first),
+                        static_cast<uint16_t>(format_type.second), data.data());
     break;
   default:
     break;
@@ -72,5 +78,11 @@ void Texture::SetData(std::span<const std::byte> data) {
 }
 
 void Texture::Bind(std::size_t unit) { glBindTextureUnit(unit, texture_); }
+
+void Texture::Resize(int32_t width, int32_t height) {
+  Destroy();
+  size_ = Vector2i(width, height);
+  CreateStorage();
+}
 
 } // namespace Terabithia

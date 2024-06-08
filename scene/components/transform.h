@@ -7,12 +7,17 @@ namespace Terabithia {
 
 class Transform {
 public:
-  Vector3f &GetLocation() { return local_position_; }
+  Vector3f &GetPosition() { return position_; }
+  Vector3f &GetRotation() { return rotation_angles_; }
+  Vector3f &GetScale() { return scale_; }
+
+  Matrix4f GetMatrix();
 
 private:
-  Vector3f local_position_;
-  Quaternion local_rotation_;
-  Vector3f local_scale_;
+  Vector3f position_;
+  Quaternion rotation_;
+  Vector3f rotation_angles_;
+  Vector3f scale_;
 };
 
 } // namespace Terabithia

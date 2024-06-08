@@ -15,9 +15,6 @@ void ImGuiWindow::Begin() {
 
   OnBegin();
 
-  ImGuiStyle &style = ImGui::GetStyle();
-  style.WindowRounding = 5.0f;
-
   bool not_collapsed = ImGui::Begin(name_.c_str(), &is_visible, GetFlags());
 
   if (visible_ == false) {

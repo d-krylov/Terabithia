@@ -62,8 +62,10 @@ void SetBlending(bool b, const BlendInformation &bi) {
 
 void SetFaceCulling(bool b) {
   b ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
-  glFrontFace(GL_CCW);
+  if (b) {
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+  }
 }
 
 void SetDepthTesting(bool b) { b ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST); }

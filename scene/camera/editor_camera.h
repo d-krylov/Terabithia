@@ -1,11 +1,14 @@
 #ifndef EDITOR_CAMERA_H
 #define EDITOR_CAMERA_H
 
+#include "camera.h"
+
 namespace Terabithia {
 
-class EditorCamera {
-
+class EditorCamera : public Camera {
 public:
+  EditorCamera();
+
 private:
 };
 

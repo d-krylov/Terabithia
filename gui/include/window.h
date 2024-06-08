@@ -53,6 +53,7 @@ public:
   void SetCursorPosition(const Vector2d &position);
   void SetWindowEventHandler(WindowEventHandler *handler);
   void SetCursor(int32_t index);
+  void SetInputMode(int32_t mode, int32_t value);
 
 protected:
   void SetCursors();

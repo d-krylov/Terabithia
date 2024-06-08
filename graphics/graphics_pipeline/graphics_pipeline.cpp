@@ -1,4 +1,5 @@
 #include "graphics_pipeline.h"
+#include "easyloggingpp/easylogging++.h"
 #include "tools.h"
 
 namespace Terabithia {
@@ -36,7 +37,9 @@ void GraphicsPipeline::AddShader(ShaderIndex index, const std::string &source) {
   auto kind = static_cast<uint16_t>(GetShaderKind(index));
   shaders_[index] = glCreateShaderProgramv(kind, 1, &source_cstr);
   bool status = GetShaderLinkStatus(shaders_[index]);
-  CORE_VERIFY(status);
+  if (status == false) {
+    LOG(FATAL) << GetShaderLog(shaders_[index]);
+  }
   UseStage(index);
 }
 

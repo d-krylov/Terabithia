@@ -21,6 +21,7 @@ public:
 
   void Select(entt::entity entity);
   void Deselect(entt::entity entity);
+  void ClearSelected();
 
 private:
   std::vector<entt::entity> selected_entities_;

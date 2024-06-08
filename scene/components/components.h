@@ -2,6 +2,7 @@
 #define COMPONENTS_H
 
 #include "UUID.h"
+#include "camera.h"
 #include "light.h"
 #include "model.h"
 #include "transform.h"

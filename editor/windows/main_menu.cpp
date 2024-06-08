@@ -11,6 +11,9 @@ void Editor::DrawMainMenu() {
 
       if (ImGui::BeginMenu("New")) {
         if (ImGui::MenuItem("Scene")) {
+          IGFD::FileDialogConfig config;
+          config.path = ".";
+          ImGuiFileDialog::Instance()->OpenDialog("Model", "Select Model", ".obj", config);
         }
         ImGui::EndMenu();
       }

@@ -29,4 +29,6 @@ void SelectionManager::Deselect(entt::entity entity) {
   }
 }
 
+void SelectionManager::ClearSelected() { selected_entities_.clear(); }
+
 } // namespace Terabithia

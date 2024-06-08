@@ -1,6 +1,7 @@
 #include "hierarchy_window.h"
 #include "application.h"
 #include "components.h"
+#include "easyloggingpp/easylogging++.h"
 #include "editor_helpers.h"
 #include "entity.h"
 #include "gui.h"
@@ -31,7 +32,9 @@ void HierarchyWindow::AddEntity() {
   }
 
   if (ImGui::Selectable("Mesh")) {
-    auto mesh = scene.CreateEntity("Mesh");
+    IGFD::FileDialogConfig config;
+    config.path = ".";
+    ImGuiFileDialog::Instance()->OpenDialog("Model", "Select Model", ".obj", config);
   }
 
   if (ImGui::Selectable("Lua Script")) {
@@ -42,42 +45,50 @@ void HierarchyWindow::AddEntity() {
 
     if (ImGui::MenuItem("Plane")) {
       auto primitive = scene.CreateEntity("Plane");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::PLANE);
+      primitive.AddComponent<Transform>();
     }
 
     if (ImGui::MenuItem("Box")) {
       auto primitive = scene.CreateEntity("Box");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::BOX);
+      primitive.AddComponent<Transform>();
     }
 
     if (ImGui::MenuItem("Sphere")) {
       auto primitive = scene.CreateEntity("Sphere");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::SPHERE);
+      primitive.AddComponent<Transform>();
     }
 
     if (ImGui::MenuItem("Cylinder")) {
       auto primitive = scene.CreateEntity("Cylinder");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::CYLINDER);
+      primitive.AddComponent<Transform>();
     }
 
     if (ImGui::MenuItem("Cone")) {
       auto primitive = scene.CreateEntity("Cone");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::CONE);
+      primitive.AddComponent<Transform>();
     }
 
     if (ImGui::MenuItem("Torus")) {
       auto primitive = scene.CreateEntity("Torus");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::TORUS);
+      primitive.AddComponent<Transform>();
     }
 
     if (ImGui::MenuItem("Capsule")) {
       auto primitive = scene.CreateEntity("Capsule");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::CAPSULE);
+      primitive.AddComponent<Transform>();
     }
 
     if (ImGui::MenuItem("Terrain")) {
       auto primitive = scene.CreateEntity("Terrain");
-      primitive.AddComponent<Model>();
+      primitive.AddComponent<Model>(PrimitiveMeshType::TERRAIN);
+      primitive.AddComponent<Transform>();
     }
 
     ImGui::EndMenu();
@@ -103,7 +114,12 @@ void HierarchyWindow::DrawEntityTree() {
         ImGui::TreePop();
       }
 
+      bool shift = ImGui::IsKeyDown(ImGuiKey_LeftShift);
+
       if (ImGui::IsItemClicked()) {
+        if (shift == false) {
+          selection_manager.ClearSelected();
+        }
         if (selected == false) {
           selection_manager.Select(entity);
         } else {

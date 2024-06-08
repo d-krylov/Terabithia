@@ -43,7 +43,7 @@ public:
   void Attach(const FramebufferAttachment &attachment);
 
 protected:
-  bool Verify();
+  [[nodiscard]] FramebufferStatus GetStatus() const;
 
 private:
   Handle framebuffer_{0};

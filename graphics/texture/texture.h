@@ -7,6 +7,7 @@
 namespace Terabithia {
 
 class Image;
+class CubeMap;
 
 class Texture {
 public:
@@ -16,6 +17,7 @@ public:
           const SamplerCreateInformation &sampler_ci = {});
 
   Texture(const Image &image);
+  Texture(const CubeMap &cubemap);
 
   ~Texture();
 
@@ -32,9 +34,10 @@ public:
 
   void Bind(std::size_t unit);
   void SetData(std::span<const std::byte> data);
-  void Destroy();
+  void Resize(int32_t width, int32_t height);
 
 protected:
+  void Destroy();
   void CreateStorage();
   void SetParameters(const SamplerCreateInformation &sampler_ci);
 

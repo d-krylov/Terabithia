@@ -8,6 +8,7 @@ namespace Terabithia {
 
 bool PrimaryButton(const std::string &name, const Vector2i &size);
 void InputVector3(std::string_view item_name, Vector3f &value);
+void ShowCheckmark(bool f);
 
 } // namespace Terabithia
 

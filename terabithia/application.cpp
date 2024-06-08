@@ -11,10 +11,17 @@ Application &Application::Get() {
   return *instance_;
 }
 
+// clang-format off
 Application::Application()
-  : main_window_("Terabithia", 1920, 1080), imgui_platform_(main_window_) {
+  : main_window_("Terabithia", 1920, 1080), 
+    imgui_platform_(main_window_),
+    scene_(), 
+    editor_(),
+    shader_library_(),
+    renderer_() {
   instance_ = this;
 }
+// clang-format on
 
 Application::~Application() {}
 

@@ -7,19 +7,27 @@
 
 namespace Terabithia {
 
-constexpr uint32_t BUFFERS_COUNT = 2;
-
 class MeshAllocator {
 public:
   MeshAllocator();
 
-  [[nodiscard]] std::optional<std::size_t> GetOffsetInVertexBuffer(const Mesh &mesh);
-  [[nodiscard]] std::optional<std::size_t> GetOffsetInIndexBuffer(const Mesh &mesh);
+  [[nodiscard]] std::optional<std::size_t> GetOffsetInVBO(const Mesh &mesh);
+  [[nodiscard]] std::optional<std::size_t> GetOffsetInIBO(const Mesh &mesh);
+
+  [[nodiscard]] bool IsInVBO(const Mesh &mesh) const;
+  [[nodiscard]] bool IsInIBO(const Mesh &mesh) const;
+
+  void PushMesh(const Mesh &mesh);
+
+  void OnDrawMesh();
 
 private:
-  std::array<VertexArray, BUFFERS_COUNT> vertex_arrays_;
-  std::array<VertexBuffer, BUFFERS_COUNT> vertex_buffers_;
+  VertexArray vertex_array_;
+  VertexBuffer vertex_buffer_;
   Buffer index_buffer_;
+  Buffer ssbo_buffer_;
+  std::unordered_map<uint64_t, std::size_t> vbo_offsets_;
+  std::unordered_map<uint64_t, std::size_t> ibo_offsets_;
 };
 
 } // namespace Terabithia

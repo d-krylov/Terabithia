@@ -14,4 +14,16 @@ Entity Scene::CreateEntity(std::string_view name) {
   return entity;
 }
 
+std::vector<Entity> Scene::GetAllEntities() {
+  std::vector<Entity> ret;
+  auto view = registry_.view<NameComponent>();
+  for (auto &e : view) {
+    Entity new_entity(e, this);
+    if (new_entity.IsValid()) {
+      ret.push_back(new_entity);
+    }
+  }
+  return ret;
+}
+
 } // namespace Terabithia
