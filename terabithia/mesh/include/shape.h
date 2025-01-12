@@ -2,6 +2,7 @@
 #define TERABITHIA_SHAPE_H
 
 #include <vector>
+#include "mesh.h"
 
 namespace Terabithia {
 

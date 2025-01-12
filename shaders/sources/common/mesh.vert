@@ -15,7 +15,7 @@ layout (location = 3) out vec2 out_uv;
 // UNIFORM
 uniform mat4 u_view_matrix  = mat4(1.0);
 uniform mat4 u_projection_matrix = mat4(1.0);
-uniform mat4 u_model_matrix = mat4(1.0);
+uniform mat4  u_model_matrix = mat4(1.0);
 
 out gl_PerVertex {
   vec4 gl_Position;

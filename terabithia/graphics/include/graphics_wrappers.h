@@ -88,6 +88,15 @@ inline void ShaderSource(DescriptorType &shader, const char *const &sources) {
   GL_CALL(glShaderSource, shader, 1, &sources, (const int *)nullptr);
 }
 
+template <ContiguousSizedRangeT<std::byte> R> inline void ShaderBinary(const DescriptorType &shader, R &&binary_data) {
+  GL_CALL(glShaderBinary, 1, &shader, uint32_t(GL_SHADER_BINARY_FORMAT_SPIR_V), (const void *)std::ranges::data(binary_data),
+          (int32_t)std::ranges::size(binary_data));
+}
+
+inline void SpecializeShader(const DescriptorType &shader, const char *entrypoint = "main") {
+  GL_CALL(glSpecializeShader, shader, entrypoint, 0u, (const uint32_t *)nullptr, (const uint32_t *)nullptr);
+}
+
 inline int32_t GetShaderParameter(DescriptorType shader, ShaderParameter parameter) {
   auto result{0};
   GL_CALL(glGetShaderiv, shader, Cast(parameter), &result);

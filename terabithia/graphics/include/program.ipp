@@ -7,8 +7,12 @@
 
 namespace Terabithia {
 
-inline Program::Shader::Shader(const std::filesystem::path &path, ShaderType shader_type) {
-  shader_ = GL::CreateShader(shader_type);
+inline Program::Shader::Shader(const ShaderInformation &shader_infofrmation, bool binary) {
+  shader_ = GL::CreateShader(shader_infofrmation.second);
+  binary ? LoadBinary(shader_infofrmation.first) : LoadSource(shader_infofrmation.first);
+}
+
+inline void Program::Shader::LoadSource(const std::filesystem::path &path) {
   std::ifstream file(path.c_str());
   std::string source{std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
   GL::ShaderSource(shader_, source.c_str());
@@ -16,19 +20,24 @@ inline Program::Shader::Shader(const std::filesystem::path &path, ShaderType sha
   std::cout << GL::GetShaderLog(shader_) << std::endl;
 }
 
-inline Program::Program(const std::filesystem::path &vertex, const std::filesystem::path &fragment) {
-  program_ = GL::CreateProgram();
-  Shader vertex_shader(vertex, ShaderType::VERTEX);
-  Shader fragment_shader(fragment, ShaderType::FRAGMENT);
-  GL::AttachShader(program_, vertex_shader);
-  GL::AttachShader(program_, fragment_shader);
-  GL::LinkProgram(program_);
+inline void Program::Shader::LoadBinary(const std::filesystem::path &path) {
+  auto binary = ReadBinaryFile(path);
+  GL::ShaderBinary(shader_, binary);
+  GL::SpecializeShader(shader_);
 }
 
-inline Program::Program(const std::filesystem::path &compute) {
+inline Program::Program(const std::filesystem::path &vertex, const std::filesystem::path &fragment, bool binary) {
+  AddShaders({{vertex, ShaderType::VERTEX}, {fragment, ShaderType::FRAGMENT}}, binary);
+}
+
+inline Program::Program(const std::filesystem::path &compute, bool binary) { AddShaders({{compute, ShaderType::COMPUTE}}, binary); }
+
+inline void Program ::AddShaders(const std::initializer_list<ShaderInformation> &shaders, bool binary) {
   program_ = GL::CreateProgram();
-  Shader compute_shader(compute, ShaderType::COMPUTE);
-  GL::AttachShader(program_, compute_shader);
+  for (const auto &shader_information : shaders) {
+    Shader shader(shader_information, binary);
+    GL::AttachShader(program_, shader);
+  }
   GL::LinkProgram(program_);
 }
 

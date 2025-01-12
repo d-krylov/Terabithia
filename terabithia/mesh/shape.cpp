@@ -1,4 +1,5 @@
 #include "mesh/include/shape.h"
+#include <algorithm>
 
 namespace Terabithia {
 
