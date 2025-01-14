@@ -3,6 +3,7 @@
 
 #include "graphics/include/graphics_wrappers.h"
 #include "core/include/macros.h"
+#include "core/include/image.h"
 
 namespace Terabithia {
 
@@ -10,6 +11,8 @@ class Texture {
 public:
   Texture(int32_t w, int32_t h, int32_t d, TextureTarget target, InternalFormat format, bool mipmap, MinFilter min, MagFilter mag,
           const Wrap &wrap);
+
+  Texture(const ImageWrapper &image_wrapper, bool mipmap = false);
 
   template <ContiguousSizedRange R> Texture(int32_t width, int32_t height, InternalFormat format, R &&data);
 

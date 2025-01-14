@@ -3,14 +3,14 @@
 
 namespace Terabithia {
 
-Image::Image(const std::filesystem::path &path) {
+ImageWrapper::ImageWrapper(const std::filesystem::path &path) {
   stbi_set_flip_vertically_on_load(true);
-  auto data = stbi_load(path.c_str(), &width_, &height_, &channels_, STBI_default);
+  auto data = stbi_load(path.c_str(), &width_, &height_, &channels_, STBI_rgb_alpha);
   if (data != nullptr) {
-    image_data_ = std::span(reinterpret_cast<std::byte *>(data), GetSize());
+    image_data_ = std::span(data, GetSize());
   }
 }
 
-Image::~Image() { stbi_image_free(image_data_.data()); }
+ImageWrapper::~ImageWrapper() { stbi_image_free(image_data_.data()); }
 
 } // namespace Terabithia

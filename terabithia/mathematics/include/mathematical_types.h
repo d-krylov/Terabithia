@@ -29,6 +29,10 @@ constexpr inline auto Z_ = Vector3f(0.0f, 0.0f, 1.0f);
 
 constexpr inline float PI_ = glm::pi<float>();
 
+constexpr inline float SQRT5_ = 2.23606797749979f;
+
+constexpr inline float PHI_ = 0.5f * SQRT5_ + 0.5f;
+
 template <typename T> inline auto CastToPointer(const T &value) { return glm::value_ptr(value); }
 
 } // namespace Terabithia

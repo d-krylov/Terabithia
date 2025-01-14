@@ -18,6 +18,12 @@ inline Texture::Texture(int32_t width, int32_t height, int32_t depth, TextureTar
   CreateStorage();
 }
 
+inline Texture::Texture(const ImageWrapper &image, bool mipmap)
+  : Texture(image.GetWidth(), image.GetHeight(), 1, TextureTarget::TEXTURE_2D, InternalFormat::RGBA8, mipmap, MinFilter::LINEAR,
+            MagFilter::LINEAR, WrapMode::CLAMP_TO_EDGE) {
+  SetData(image.GetData());
+}
+
 template <ContiguousSizedRange R> inline void Texture::SetData(R &&data, int32_t level, int32_t x, int32_t y, int32_t z) {
   auto [pixel_format, pixel_type] = GetPixelInformation();
   auto dimensions = GetDimensions();
@@ -53,7 +59,13 @@ inline void Texture::CreateStorage() {
   }
 }
 
-inline void Texture::SetParameters(MagFilter mag, MinFilter min, const Wrap &wrap) {}
+inline void Texture::SetParameters(MagFilter mag, MinFilter min, const Wrap &wrap) {
+  GL::SetTextureParameter(texture_, TextureParameter::TEXTURE_MIN_FILTER, Cast(min));
+  GL::SetTextureParameter(texture_, TextureParameter::TEXTURE_MAG_FILTER, Cast(mag));
+  GL::SetTextureParameter(texture_, TextureParameter::TEXTURE_WRAP_S, Cast(wrap.s_));
+  GL::SetTextureParameter(texture_, TextureParameter::TEXTURE_WRAP_T, Cast(wrap.t_));
+  GL::SetTextureParameter(texture_, TextureParameter::TEXTURE_WRAP_R, Cast(wrap.r_));
+}
 
 inline uint32_t GetMipLevels(int32_t x, int32_t y, int32_t z) {
   auto m = std::max(x, std::max(y, z));

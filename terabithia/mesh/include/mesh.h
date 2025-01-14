@@ -30,6 +30,17 @@ struct Vertex {
   Vector3f bitangent_;
 };
 
+struct MaterialProperties {
+  Vector3f ambient_;
+  Vector3f diffuse_;
+  Vector3f specular_;
+  float shininess_;
+};
+
+struct Material {};
+
+struct Mesh {};
+
 } // namespace Terabithia
 
 #endif // TERABITHIA_MESH_H

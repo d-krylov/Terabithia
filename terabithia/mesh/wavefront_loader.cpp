@@ -1,10 +1,15 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 #include "mesh/include/mesh_loader.h"
-#include <iostream>
+#include "graphics/texture/texture.h"
+#include <unordered_map>
 #include <span>
 
 namespace Terabithia {
+
+bool HasSmoothingGroup(const tinyobj::shape_t &shape) {
+  return std::any_of(shape.mesh.smoothing_group_ids.begin(), shape.mesh.smoothing_group_ids.end(), [](auto id) { return id > 0; });
+}
 
 std::vector<PlainVertex> LoadWavefront(std::span<const tinyobj::shape_t> shapes, const tinyobj::attrib_t &attributes) {
   std::vector<PlainVertex> vertices;
@@ -22,6 +27,51 @@ std::vector<PlainVertex> LoadWavefront(std::span<const tinyobj::shape_t> shapes,
     }
   }
   return vertices;
+}
+
+std::unordered_map<std::string, Texture> LoadMaterials(const std::filesystem::path image_root,
+                                                       std::span<const tinyobj::material_t> materials) {
+  std::unordered_map<std::string, Texture> textures;
+
+  for (const auto &material : materials) {
+    if (material.ambient_texname.size() > 0) {
+      if (textures.contains(material.ambient_texname) == false) {
+        textures.emplace(material.ambient_texname, Texture(image_root / material.ambient_texname));
+      }
+    }
+
+    if (material.diffuse_texname.size() > 0) {
+      if (textures.contains(material.diffuse_texname) == false) {
+        textures.emplace(material.diffuse_texname, Texture(image_root / material.diffuse_texname));
+      }
+    }
+
+    if (material.specular_texname.size() > 0) {
+      if (textures.contains(material.specular_texname) == false) {
+        textures.emplace(material.specular_texname, Texture(image_root / material.specular_texname));
+      }
+    }
+
+    if (material.bump_texname.size() > 0) {
+      if (textures.contains(material.bump_texname) == false) {
+        textures.emplace(material.bump_texname, Texture(image_root / material.bump_texname));
+      }
+    }
+
+    if (material.metallic_texname.size() > 0) {
+      if (textures.contains(material.metallic_texname) == false) {
+        textures.emplace(material.metallic_texname, Texture(image_root / material.metallic_texname));
+      }
+    }
+
+    if (material.roughness_texname.size() > 0) {
+      if (textures.contains(material.roughness_texname) == false) {
+        textures.emplace(material.roughness_texname, Texture(image_root / material.roughness_texname));
+      }
+    }
+  }
+
+  return textures;
 }
 
 void GetNormals(std::span<PlainVertex> vertices) {

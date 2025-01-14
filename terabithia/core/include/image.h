@@ -7,23 +7,24 @@
 
 namespace Terabithia {
 
-class Image {
+class ImageWrapper {
 public:
-  Image(const std::filesystem::path &path);
+  ImageWrapper(const std::filesystem::path &path);
 
-  ~Image();
+  ~ImageWrapper();
 
   int32_t GetWidth() const { return width_; }
   int32_t GetHeight() const { return height_; }
-
+  int32_t GetChannels() const { return channels_; }
   int32_t GetSize() const { return width_ * height_ * channels_; }
-  std::span<const std::byte> GetData() const { return image_data_; }
+
+  std::span<const uint8_t> GetData() const { return image_data_; }
 
 private:
   int32_t width_;
   int32_t height_;
   int32_t channels_;
-  std::span<std::byte> image_data_;
+  std::span<uint8_t> image_data_;
 };
 
 } // namespace Terabithia

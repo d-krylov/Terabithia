@@ -22,12 +22,12 @@ enum class PixelFormat : uint32_t {
 #include "graphics_types.def"
 };
 
-enum class MinFilter : uint16_t {
+enum class MinFilter : int32_t {
 #define MIN_FILTER(X) X = GL_##X,
 #include "graphics_types.def"
 };
 
-enum class MagFilter : uint16_t {
+enum class MagFilter : int32_t {
 #define MAG_FILTER(X) X = GL_##X,
 #include "graphics_types.def"
 };

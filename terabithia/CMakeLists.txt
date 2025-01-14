@@ -36,6 +36,7 @@ set(TERABITHIA_SOURCES
   ${TERABITHIA_SOURCE_DIR}/gui/imgui/imgui_layer.cpp
   ${TERABITHIA_SOURCE_DIR}/graphics/graphics_types.cpp
   ${TERABITHIA_SOURCE_DIR}/application/application.cpp
+  ${TERABITHIA_SOURCE_DIR}/mathematics/noise.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC 

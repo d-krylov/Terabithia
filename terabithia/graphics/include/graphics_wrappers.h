@@ -110,6 +110,12 @@ inline std::string GetShaderLog(const DescriptorType &shader) {
   return message;
 }
 
+inline void DispatchCompute(uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z) {
+  GL_CALL(glDispatchCompute, num_groups_x, num_groups_y, num_groups_z);
+}
+
+inline void MemoryBarrier(BarrierBit barrier_bit) { GL_CALL(glMemoryBarrier, Cast(barrier_bit)); }
+
 // Uniform
 inline uint32_t GetUniformLocation(DescriptorType program, std::string_view name) {
   return GL_CALL(glGetUniformLocation, program, name.data());
