@@ -1,0 +1,12 @@
+#ifndef TERABITHIA_CONFIG_H
+#define TERABITHIA_CONFIG_H
+
+#include <filesystem>
+
+namespace Terabithia {
+
+std::filesystem::path TERABITHIA_PROJECT_ROOT_DIR = "@PROJECT_SOURCE_DIR@";
+
+} // namespace Terabithia
+
+#endif // TERABITHIA_CONFIG_H
