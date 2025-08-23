@@ -7,12 +7,14 @@ using namespace Terabithia;
 class MeshViewer : public Layer {
 public:
   void OnImGui() override {
-    ImGui::Begin("Hello");
+    auto position = camera_.GetPosition();
+    ImGui::Begin("Camera");
+    ImGui::DragFloat3("Position", glm::value_ptr(position));
     ImGui::End();
+    camera_.SetPosition(position);
   }
 
   void OnUpdate() override {
-
   }
 
   void OnEvent(Event &event) override {
@@ -22,6 +24,7 @@ public:
   }
 
 private:
+  Camera camera_;
 };
 
 int main() {

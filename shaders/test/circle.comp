@@ -1,0 +1,22 @@
+#version 460 core
+
+layout (local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+	
+layout(rgba32f, binding = 0) uniform image2D u_image_output;
+
+layout (location = 0) uniform float iTime;
+layout (location = 1) uniform ivec2 iResolution;
+	
+void main() {
+  vec2 uv = gl_GlobalInvocationID.xy;
+
+  vec2 screen = (2.0 * uv - iResolution) / iResolution.y;
+
+  vec4 value = vec4(0.0, 0.0, 0.0, 1.0);
+  
+  value.x = length(screen) - 0.5;
+
+  ivec2 pq = ivec2(uv);
+
+  imageStore(u_image_output, pq, value);
+}

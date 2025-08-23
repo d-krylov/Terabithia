@@ -14,9 +14,12 @@ Handle CreateProgram() {
 }
 
 Handle CreateShader(ShaderType shader_type) {
-  auto type = std::to_underlying(shader_type);
-  auto shader = GL_CALL(glCreateShader, type);
+  auto shader = GL_CALL(glCreateShader, std::to_underlying(shader_type));
   return shader;
+}
+
+void DispatchCompute(uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z) {
+  GL_CALL(glDispatchCompute, num_groups_x, num_groups_y, num_groups_z);
 }
 
 void ShaderSource(Handle shader, const char *sources) {
@@ -60,11 +63,11 @@ void ProgramUniform(Handle program, int32_t location, uint32_t value) {
 }
 
 void ProgramUniform(Handle program, int32_t location, float value) {
-  glProgramUniform1f(program, location, value);
+  GL_CALL(glProgramUniform1f, program, location, value);
 }
 
 void ProgramUniform(Handle program, int32_t location, double value) {
-  glProgramUniform1d(program, location, value);
+  GL_CALL(glProgramUniform1d, program, location, value);
 }
 
 void ProgramUniformV2(Handle program, int32_t location, std::span<const float> value) {
@@ -188,18 +191,15 @@ void VertexArrayAttributeBinding(Handle vertex_array, uint32_t attribute_index, 
 }
 
 void VertexArrayAttributeFormat(Handle vertex_array, uint32_t index, int32_t size, VertexAttributeType type, uint32_t offset, bool normalized) {
-  auto native_type = std::to_underlying(type);
-  GL_CALL(glVertexArrayAttribFormat, vertex_array, index, size, native_type, GLboolean(normalized), offset);
+  GL_CALL(glVertexArrayAttribFormat, vertex_array, index, size, std::to_underlying(type), GLboolean(normalized), offset);
 }
 
 void VertexArrayAttributeLFormat(Handle vertex_array, uint32_t index, int32_t size, VertexAttributeType type, uint32_t offset) {
-  auto native_type = std::to_underlying(type);
-  GL_CALL(glVertexArrayAttribLFormat, vertex_array, index, size, native_type, offset);
+  GL_CALL(glVertexArrayAttribLFormat, vertex_array, index, size, std::to_underlying(type), offset);
 }
 
 void VertexArrayAttributeIFormat(Handle vertex_array, uint32_t index, int32_t size, VertexAttributeType type, uint32_t offset) {
-  auto native_type = std::to_underlying(type);
-  GL_CALL(glVertexArrayAttribIFormat, vertex_array, index, size, native_type, offset);
+  GL_CALL(glVertexArrayAttribIFormat, vertex_array, index, size, std::to_underlying(type), offset);
 }
 
 // BUFFER
@@ -249,24 +249,31 @@ void BindTextureUnit(Handle texture, uint32_t unit) {
 }
 
 void CreateTextureStorage(Handle texture, int32_t levels, int32_t width, InternalFormat sized_format) {
-  auto native_format = std::to_underlying(sized_format);
-  GL_CALL(glTextureStorage1D, texture, levels, native_format, width);
+  GL_CALL(glTextureStorage1D, texture, levels, std::to_underlying(sized_format), width);
 }
 
 void CreateTextureStorage(Handle texture, int32_t levels, const Extent2D &extent, InternalFormat sized_format) {
-  auto native_format = std::to_underlying(sized_format);
-  GL_CALL(glTextureStorage2D, texture, levels, native_format, extent.width, extent.height);
+  GL_CALL(glTextureStorage2D, texture, levels, std::to_underlying(sized_format), extent.width, extent.height);
 }
 
 void CreateTextureStorage(Handle texture, int32_t levels, const Extent3D &extent, InternalFormat sized_format) {
-  auto native_format = std::to_underlying(sized_format);
-  GL_CALL(glTextureStorage3D, texture, levels, native_format, extent.width, extent.height, extent.depth);
+  GL_CALL(glTextureStorage3D, texture, levels, std::to_underlying(sized_format), extent.width, extent.height, extent.depth);
+}
+
+void GenerateTextureMipmap(Handle texture) {
+  GL_CALL(glGenerateTextureMipmap, texture);
+}
+
+void SetTextureParameter(Descriptor &texture, TextureParameterName parameter, int32_t value) {
+  GL_CALL(glTextureParameteri, texture, std::to_underlying(parameter), value);
 }
 
 void TextureSubImage(Handle texture, int32_t width, const Pixel &pixel, std::span<const std::byte> data, int32_t xoffset, int32_t level) {
-  auto native_format = std::to_underlying(pixel.format);
-  auto native_type = std::to_underlying(pixel.type);
-  GL_CALL(glTextureSubImage1D, texture, level, xoffset, width, native_format, native_type, data.data());
+  GL_CALL(glTextureSubImage1D, texture, level, xoffset, width, std::to_underlying(pixel.format), std::to_underlying(pixel.type), data.data());
+}
+
+void BindImageTexture(Handle texture, uint32_t unit, BufferAccess access, InternalFormat format, int32_t level, int32_t layer) {
+  GL_CALL(glBindImageTexture, unit, texture, level, false, 0, std::to_underlying(access), std::to_underlying(format));
 }
 
 // clang-format off
@@ -302,18 +309,15 @@ void Clear(ClearBufferMask mask) {
 }
 
 void Enable(Capability capability) {
-  auto native_capability = std::to_underlying(capability);
-  GL_CALL(glEnable, native_capability);
+  GL_CALL(glEnable, std::to_underlying(capability));
 }
 
 void Disable(Capability capability) {
-  auto native_capability = std::to_underlying(capability);
-  GL_CALL(glDisable, native_capability);
+  GL_CALL(glDisable, std::to_underlying(capability));
 }
 
 void SetBlendEquation(BlendEquationMode mode) {
-  auto native_mode = std::to_underlying(mode);
-  GL_CALL(glBlendEquation, native_mode);
+  GL_CALL(glBlendEquation, std::to_underlying(mode));
 }
 
 void SetBlendFunctionSeparate(BlendFunction srgb, BlendFunction drgb, BlendFunction salpha, BlendFunction dalpha) {
@@ -328,17 +332,77 @@ void SetDebugMessageCallback(GLDEBUGPROC callback) {
   GL_CALL(glDebugMessageCallback, callback, nullptr);
 }
 
+void SetDepthFunction(DepthFunction depth_function) {
+  GL_CALL(glDepthFunc, std::to_underlying(depth_function));
+}
+
+void DepthMask(bool enable_write) {
+  GL_CALL(glDepthMask, enable_write);
+}
+
+void FrontFace(FrontFaceDirection direction) {
+  auto direction_native = std::to_underlying(direction);
+  GL_CALL(glFrontFace, direction_native);
+}
+
+void CullFace(TriangleFace triangle_face) {
+  auto native_face = std::to_underlying(triangle_face);
+  GL_CALL(glCullFace, native_face);
+}
+
+// FRAMEBUFFER
+
+void CreateFramebuffer(Handle &framebuffer) {
+  GL_CALL(glCreateFramebuffers, 1, &framebuffer);
+}
+
+void DeleteFramebuffer(Handle &framebuffer) {
+  GL_CALL(glDeleteFramebuffers, 1, &framebuffer);
+}
+
+void UnbindFramebuffer(FramebufferTarget framebuffer_target) {
+  GL_CALL(glBindFramebuffer, std::to_underlying(framebuffer_target), 0u);
+}
+
+void BindFramebuffer(Handle framebuffer, FramebufferTarget framebuffer_target) {
+  GL_CALL(glBindFramebuffer, std::to_underlying(framebuffer_target), framebuffer);
+}
+
+void FramebufferAttach(Handle framebuffer, Handle texture, FramebufferAttachment point, int32_t level) {
+  GL_CALL(glNamedFramebufferTexture, framebuffer, std::to_underlying(point), texture, level);
+}
+
+void FramebufferRenderbuffer(Handle framebuffer, Handle renderbuffer, FramebufferAttachment point) {
+  GL_CALL(glNamedFramebufferRenderbuffer, framebuffer, std::to_underlying(point), GL_RENDERBUFFER, renderbuffer);
+}
+
+void FramebufferTextureLayer(Handle framebuffer, Handle texture, FramebufferAttachment point, int32_t level, int32_t layer) {
+  GL_CALL(glNamedFramebufferTextureLayer, framebuffer, std::to_underlying(point), texture, level, layer);
+}
+
+FramebufferStatus CheckFramebufferStatus(Descriptor &framebuffer, FramebufferTarget framebuffer_target) {
+  auto status = GL_CALL(glCheckNamedFramebufferStatus, framebuffer, std::to_underlying(framebuffer_target));
+  return static_cast<FramebufferStatus>(status);
+}
+
 // DRAW
 
 void DrawArrays(int32_t first, int32_t count, PrimitiveKind primitive_kind) {
-  auto kind = std::to_underlying(primitive_kind);
-  GL_CALL(glDrawArrays, kind, first, count);
+  GL_CALL(glDrawArrays, std::to_underlying(primitive_kind), first, count);
 }
 
 void DrawElementsBaseVertex(int32_t count, int32_t base, DrawElementType index_type, std::byte *indices, PrimitiveKind primitive_kind) {
-  auto kind = std::to_underlying(primitive_kind);
-  auto type = std::to_underlying(index_type);
-  GL_CALL(glDrawElementsBaseVertex, kind, count, type, indices, base);
+  GL_CALL(glDrawElementsBaseVertex, std::to_underlying(primitive_kind), count, std::to_underlying(index_type), indices, base);
+}
+
+// BARRIER
+
+void MemoryBarrier(MemoryBarrierMask barrier_mask) {
+  GL_CALL(glMemoryBarrier, (int32_t)barrier_mask);
+}
+
+void MemoryBarrierByRegion(MemoryBarrierRegionMask barrier_mask) {
+  GL_CALL(glMemoryBarrierByRegion, (int32_t)barrier_mask);
 }
 
 } // namespace Terabithia

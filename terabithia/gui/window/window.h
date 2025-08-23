@@ -36,6 +36,8 @@ public:
 
   int32_t GetKey(int32_t key) const;
 
+  float GetAspect() const;
+
   void Invoke(Event &event);
 
   void SetEventHandler(const EventHandler &handler);

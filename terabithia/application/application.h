@@ -15,9 +15,13 @@ public:
 
   void Run();
 
+  static Application *Get();
+
   void AddLayer(Layer *layer);
 
   void OnEvent(Event &event);
+
+  const Window &GetWindow() const;
 
 private:
   Window main_window_;
@@ -25,6 +29,8 @@ private:
   ImGuiRenderer imgui_renderer_;
 
   std::vector<Layer *> layers_;
+
+  static Application *application_instance_;
 };
 
 } // namespace Terabithia

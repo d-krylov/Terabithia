@@ -22,9 +22,8 @@ int main() {
   Terabithia::Texture texture(TextureTarget::TEXTURE_2D, InternalFormat::RGBA8, TextureInformation(800, 600));
 
   auto texture_data = MakeTexture(800, 600);
-  auto texture_span = std::span(texture_data);
 
-  texture.SetData(std::as_bytes(texture_span));
+  texture.SetData<int32_t>(texture_data);
 
   while (window.ShouldClose() == false) {
     window.PollEvents();

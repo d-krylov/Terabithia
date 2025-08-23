@@ -1,0 +1,24 @@
+#version 460 core
+
+// IN
+layout (location = 0) in vec3 in_position;
+layout (location = 1) in vec3 in_normal;
+
+// OUT
+layout (location = 0) out vec3 out_position;
+layout (location = 1) out vec3 out_normal;
+
+// UNIFORM
+uniform mat4 u_view_matrix  = mat4(1.0);
+uniform mat4 u_projection_matrix = mat4(1.0);
+uniform mat4 u_model_matrix = mat4(1.0);
+
+out gl_PerVertex {
+  vec4 gl_Position;
+};
+
+void main() {
+  gl_Position = u_projection_matrix * u_view_matrix * u_model_matrix * vec4(in_position, 1.0);
+  out_normal = normalize(mat3(transpose(inverse(u_model_matrix))) * in_normal);
+  out_position = vec3(u_model_matrix * vec4(in_position, 1.0));
+}

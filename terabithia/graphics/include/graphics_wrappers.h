@@ -38,6 +38,7 @@ void ProgramUniformV4(Handle program, int32_t location, std::span<const uint32_t
 void ProgramUniformM4(Handle program, int32_t location, std::span<const float> value, bool transpose);
 void GetShaderParameter(Handle shader, ShaderParameterName parameter, int32_t &result);
 void GetProgramParameter(Handle program, ProgramParameterName parameter, int32_t &result);
+void DispatchCompute(uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z);
 
 std::string GetShaderInfoLog(Handle shader, uint32_t length);
 std::string GetProgramInfoLog(Handle program, uint32_t length);
@@ -81,6 +82,7 @@ void BindTextureUnit(Handle texture, uint32_t unit);
 void CreateTextureStorage(Handle texture, int32_t levels, int32_t width, InternalFormat sized_format);
 void CreateTextureStorage(Handle texture, int32_t levels, const Extent2D &extent, InternalFormat sized_format);
 void CreateTextureStorage(Handle texture, int32_t levels, const Extent3D &extent, InternalFormat sized_format);
+void BindImageTexture(Handle texture, uint32_t unit, BufferAccess access, InternalFormat format, int32_t level, int32_t layer);
 // clang-format off
 void TextureSubImage(Handle texture, int32_t width, const Pixel &pixel, std::span<const std::byte> data, int32_t xoffset = 0, int32_t level = 0);
 void TextureSubImage(Handle texture, const Extent2D &extent, const Pixel &pixel, std::span<const std::byte> data, const Offset2D offset = {}, int32_t level = 0);
@@ -97,6 +99,23 @@ void Clear(ClearBufferMask mask);
 void SetBlendEquation(BlendEquationMode mode);
 void SetBlendFunctionSeparate(BlendFunction srgb, BlendFunction drgb, BlendFunction salpha, BlendFunction dalpha);
 void SetDebugMessageCallback(GLDEBUGPROC callback);
+void SetDepthFunction(DepthFunction depth_function);
+void CullFace(TriangleFace triangle_face);
+void FrontFace(FrontFaceDirection direction);
+
+// FRAMEBUFFER
+void CreateFramebuffer(Handle &framebuffer);
+void DeleteFramebuffer(Handle &framebuffer);
+void UnbindFramebuffer(FramebufferTarget framebuffer_target);
+void BindFramebuffer(Handle framebuffer, FramebufferTarget framebuffer_target);
+void FramebufferAttach(Handle framebuffer, Handle texture, FramebufferAttachment point, int32_t level);
+void FramebufferRenderbuffer(Handle framebuffer, Handle renderbuffer, FramebufferAttachment point);
+void FramebufferTextureLayer(Handle framebuffer, Handle texture, FramebufferAttachment point, int32_t level, int32_t layer);
+FramebufferStatus CheckFramebufferStatus(Descriptor &framebuffer, FramebufferTarget framebuffer_target);
+
+// BARRIER
+void MemoryBarrier(MemoryBarrierMask barrier_mask);
+void MemoryBarrierByRegion(MemoryBarrierRegionMask barrier_mask);
 
 // DRAW
 

@@ -12,5 +12,5 @@ void main() {
 
   vec4 color = texture(u_texture, in_uv);
 
-  out_color = color;
+  out_color = vec4(color.rgb, 1.0);
 }

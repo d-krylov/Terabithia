@@ -141,6 +141,13 @@ int32_t Window::GetKey(int32_t key) const {
   return glfwGetKey(native_window_, key);
 }
 
+float Window::GetAspect() const {
+  auto size = GetSize();
+  auto width = static_cast<float>(size.width);
+  auto height = static_cast<float>(size.height);
+  return width / height;
+}
+
 void Window::Invoke(Event &event) {
   if (event_handler_) {
     event_handler_(event);

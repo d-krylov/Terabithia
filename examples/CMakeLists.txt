@@ -3,6 +3,8 @@ set(EXECUTABLES
   program_introspection
   triangle
   texture
+  shapes
+  compute
 )
 
 foreach(exe ${EXECUTABLES})

@@ -14,9 +14,12 @@ public:
 
   int32_t GetHeight() const;
 
+  int32_t GetChannels() const;
+
 private:
-  int32_t width_;
-  int32_t height_;
+  int32_t width_{0};
+  int32_t height_{0};
+  int32_t channels_{0};
 };
 
 } // namespace Terabithia

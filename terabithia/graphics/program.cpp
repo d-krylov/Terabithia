@@ -11,12 +11,59 @@ std::string ReadFile(const std::filesystem::path &path) {
   return source;
 }
 
-Program::Program(std::string_view vertex_shader, std::string_view fragment_shader) {
+struct ShaderInformation {
+  std::string_view source;
+  ShaderType type;
+};
+
+void Program::Link() {
+  int32_t result = 0, length = 0;
+  LinkProgram(program_);
+  GetProgramParameter(program_, ProgramParameterName::LINK_STATUS, result);
+  GetProgramParameter(program_, ProgramParameterName::INFO_LOG_LENGTH, length);
+  auto error_information = GetProgramInfoLog(program_, length);
+  CORE_ASSERT(result == true, std::format("Program linking error: {}", error_information));
+}
+
+Program::Program(std::string_view vertex, std::string_view fragment, std::string_view tessellation_control,
+                 std::string_view tessellation_evaluation, std::string_view geometry) {
+  program_ = CreateProgram();
+
+  CORE_ASSERT(program_.IsValid(), "Invalid Program");
+
+  // clang-format off
+  auto shaders = {
+    ShaderInformation{vertex, ShaderType::VERTEX},
+    ShaderInformation{tessellation_control, ShaderType::TESSELLATION_CONTROL},
+    ShaderInformation{tessellation_evaluation, ShaderType::TESSELLATION_EVALUATION},
+    ShaderInformation{geometry, ShaderType::GEOMETRY},
+    ShaderInformation{fragment, ShaderType::FRAGMENT}
+  };
+  // clang-format on
+
+  for (const auto &shader : shaders) {
+    if (shader.source.empty() == false) {
+      AddShader(shader.source, shader.type);
+    }
+  }
+
+  Link();
+}
+
+Program::Program(std::string_view compute_shader) {
   program_ = CreateProgram();
   CORE_ASSERT(program_.IsValid(), "Invalid Program");
-  AddShader(vertex_shader, ShaderType::VERTEX);
-  AddShader(fragment_shader, ShaderType::FRAGMENT);
-  LinkProgram(program_);
+  AddShader(compute_shader, ShaderType::COMPUTE);
+  Link();
+}
+
+Program::Program(Program &&other) noexcept {
+  program_ = std::move(other.program_);
+}
+
+Program &Program::operator=(Program &&other) noexcept {
+  program_ = std::move(other.program_);
+  return *this;
 }
 
 Program::~Program() {
@@ -42,10 +89,16 @@ void Program::AddShader(std::string_view shader_source, ShaderType shader_type) 
   DeleteShader(shader);
 }
 
-Program Program::CreateFromFiles(const std::filesystem::path &vertex_path, const std::filesystem::path &fragment_path) {
-  auto vertex = ReadFile(vertex_path);
-  auto fragment = ReadFile(fragment_path);
-  return Program(vertex, fragment);
+auto Load = [](const std::filesystem::path &path) { return path.empty() ? std::string() : ReadFile(path); };
+
+Program Program::CreateFromFiles(const std::filesystem::path &vertex, const std::filesystem::path &fragment,
+                                 const std::filesystem::path &tessellation_control, const std::filesystem::path &tessellation_evaluation,
+                                 const std::filesystem::path &geometry) {
+  return Program(Load(vertex), Load(fragment), Load(tessellation_control), Load(tessellation_evaluation), Load(geometry));
+}
+
+Program Program::CreateFromFiles(const std::filesystem::path &compute_path) {
+  return Program(ReadFile(compute_path));
 }
 
 Handle Program::GetHandle() const {

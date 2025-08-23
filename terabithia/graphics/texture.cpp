@@ -86,16 +86,8 @@ void Texture::CreateStorage() {
   }
 }
 
-void Texture::SetData(std::span<const std::byte> data) {
-  auto dimensions_number = GetTextureDimensions(GetTarget());
-  auto format_information = GetFormatInformation(GetFormat());
-  const auto &ti = GetTextureInformation();
-  switch (dimensions_number) {
-  case 1: TextureSubImage(GetHandle(), ti.GetWidth(), format_information, data); break;
-  case 2: TextureSubImage(GetHandle(), ti.GetExtent2D(), format_information, data); break;
-  case 3: TextureSubImage(GetHandle(), ti.GetExtent3D(), format_information, data); break;
-  default: std::unreachable(); break;
-  }
+void Texture::BindImage(uint32_t unit, BufferAccess access, uint32_t level, int32_t layer) {
+  BindImageTexture(texture_, unit, access, internal_format_, level, layer);
 }
 
 void Texture::SetParameters() {

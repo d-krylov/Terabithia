@@ -39,6 +39,8 @@ public:
 
   void Bind(uint32_t unit);
 
+  void BindImage(uint32_t unit, BufferAccess access, uint32_t level = 0, int32_t layer = -1);
+
   InternalFormat GetFormat() const;
 
   TextureTarget GetTarget() const;
@@ -47,7 +49,8 @@ public:
 
   Handle GetHandle() const;
 
-  void SetData(std::span<const std::byte> data);
+  template <typename T>
+  void SetData(std::span<const T> data);
 
 protected:
   void CreateStorage();
@@ -61,5 +64,7 @@ private:
 };
 
 } // namespace Terabithia
+
+#include "texture.ipp"
 
 #endif // TERABITHIA_TEXTURE_H

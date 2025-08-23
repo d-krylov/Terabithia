@@ -1,5 +1,6 @@
 #include "imgui_renderer.h"
 #include "imgui.h"
+#include <print>
 
 namespace Terabithia {
 
@@ -9,13 +10,13 @@ ImGuiRenderer::ImGuiRenderer()
     vertex_buffer_(20_MiB, BufferStorageMaskBit::MAP_WRITE), index_buffer_(20_MiB, BufferStorageMaskBit::MAP_WRITE) {
   std::array vertex_attributes = {AttributeType::FLOAT_VEC2, AttributeType::FLOAT_VEC2, AttributeType::UNSIGNED_INT};
   vertex_array_.SetAttributes(vertex_attributes);
-  auto stride = GetStride(vertex_attributes);
-  VertexArrayVertexBuffer(vertex_array_.GetHandle(), vertex_buffer_.GetHandle(), 0, stride, 0);
+  VertexArrayVertexBuffer(vertex_array_.GetHandle(), vertex_buffer_.GetHandle(), 0, GetStride(vertex_attributes), 0);
   VertexArrayElementBuffer(vertex_array_.GetHandle(), index_buffer_.GetHandle());
   CreateFontsTexture();
 }
 
 void ImGuiRenderer::SetRendererState() {
+  // Clear(ClearBufferMaskBit::COLOR);
   Enable(Capability::BLEND, Capability::SCISSOR_TEST);
   Disable(Capability::CULL_FACE, Capability::DEPTH_TEST, Capability::STENCIL_TEST);
   SetBlendEquation(BlendEquationMode::FUNC_ADD);
@@ -33,7 +34,7 @@ void ImGuiRenderer::SetBuffers(const ImDrawList *command_list) {
   vertex_buffer_.Map(MapBufferAccess::WRITE_ONLY);
   index_buffer_.Map(MapBufferAccess::WRITE_ONLY);
   auto vertices_mapped = vertex_buffer_.GetMappedBufferData<ImDrawVert>();
-  auto indices_mapped = vertex_buffer_.GetMappedBufferData<ImDrawIdx>();
+  auto indices_mapped = index_buffer_.GetMappedBufferData<ImDrawIdx>();
   std::span vertices(command_list->VtxBuffer.Data, command_list->VtxBuffer.Size);
   std::span indices(command_list->IdxBuffer.Data, command_list->IdxBuffer.Size);
   std::copy(vertices.begin(), vertices.end(), vertices_mapped.begin());
@@ -110,7 +111,7 @@ void ImGuiRenderer::CreateFontsTexture() {
   io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &channels);
   auto texture_data = std::span(pixels, width * height * channels);
   font_texture_ = std::make_unique<Texture>(TextureTarget::TEXTURE_2D, InternalFormat::RGBA8, TextureInformation(width, height));
-  std::span<uint8_t> pixels_span(pixels, width * height * channels); 
+  std::span<uint8_t> pixels_span(pixels, width * height * channels);
   font_texture_->SetData(std::as_bytes(pixels_span));
   io.Fonts->SetTexID(font_texture_->GetHandle());
 }

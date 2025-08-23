@@ -14,9 +14,12 @@ set(TERABITHIA_SOURCES
   ${TERABITHIA_SOURCE_DIR}/core/image.cpp
   ${TERABITHIA_SOURCE_DIR}/core/descriptor.cpp
   ${TERABITHIA_SOURCE_DIR}/mesh/shapes/shapes.cpp
+  ${TERABITHIA_SOURCE_DIR}/mesh/model/wavefront_loader.cpp
+  ${TERABITHIA_SOURCE_DIR}/scene/camera/camera.cpp
   ${TERABITHIA_SOURCE_DIR}/graphics/graphics_types.cpp
   ${TERABITHIA_SOURCE_DIR}/graphics/graphics_wrappers.cpp
   ${TERABITHIA_SOURCE_DIR}/graphics/vertex_array.cpp
+  ${TERABITHIA_SOURCE_DIR}/graphics/framebuffer.cpp
   ${TERABITHIA_SOURCE_DIR}/graphics/buffer.cpp
   ${TERABITHIA_SOURCE_DIR}/graphics/texture.cpp
   ${TERABITHIA_SOURCE_DIR}/graphics/program.cpp

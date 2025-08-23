@@ -159,8 +159,8 @@ enum class Key : int {
 };
 
 enum class Action {
-  PRESS,
   RELEASE,
+  PRESS,
   REPEAT
 };
 

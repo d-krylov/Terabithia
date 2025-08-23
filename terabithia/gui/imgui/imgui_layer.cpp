@@ -1,6 +1,7 @@
 #include "terabithia/gui/window/window.h"
 #include "imgui_layer.h"
 #include "imgui.h"
+#include <print>
 #include <GLFW/glfw3.h>
 
 namespace Terabithia {
